@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #3b3939;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    #navbar {
+      background-color: #0e0d0d;
+      padding: 20px;
+      color: white;
+      text-align: right;
+      border-radius: 5px;
+      display: flex;
+      /* justify-content: space-between; */
+      align-items: center;
+    }
+
+    #user-profile {
+      display: flex;
+      align-items: center;
+    }
+
+    #avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    #chat-container {
+      flex: 1;
+      margin: 20px;
+      background-color: rgb(41, 39, 39);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      scrollbar-color: #4CAF50 #eee;
+    }
+
+    #messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: scroll;
+      
+    }
+    
+
+    .user-message, .response-message {
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 8px;
+      position: relative;
+    }
+
+.user-icon,.response-icon{
+ color: #756767;
+}
+
+    
+    .user-label {
+    color: #ffffff; /* Green for user label */
+  }
+
+  .response-label {
+    color: #3032ac; /* Slate Gray for response label */
+  }
+
+    .user-message {
+      /* background-color: #4CAF50; */
+      color: white;
+      
+    }
+
+    .response-message {
+      /* background-color: #708090;  */
+      color: white;
+    }
+
+    .like-dislike {
+      display: flex;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .thumb-icon {
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+ 
+
+    #input-container {
+      display: flex;
+      padding: 10px;
+      background-color: #363434;
+      position: relative;
+     
+    }
+
+    #message-input {
+      flex: 1;
+      padding: 16px;
+      border: none;
+      border-radius: 2px;
+      background-color: #242524;
+      color: white;
+    }
+
+    #send-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      padding: 8px;
+      background-color: #1a1919;
+      color: #646060;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    #send-icon.active {
+      background-color: #f9fcf9;
+      color: rgb(12, 12, 12);
+    }
+
+    #logout-button,
+    #new-chat-button {
+      background-color: #3c3b3d; /* Navy Blue */
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      /* margin-left: 15px; */
+      margin-left: auto;
+      }
+    
+
+
+    #logout-button:hover,
+    #new-chat-button:hover{
+      border: 2px solid white;
+    }
+    #new-chat-button {
+      margin-left: 950px;
+    display: flex;
+    align-items: center;
+     /* Set the order to 1 to move the New Chat button to the rightmost corner */
+  }
+    #new-chat-icon {
+      margin-right: 5px;
+    }
+    .feedback-popup {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 50%;
+      background-color: #292b29;
+      color: white;
+      padding: 10px;
+      border-radius: 4px;
+      display: none;
+    }
+
+    .feedback-input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 8px;
+      box-sizing: border-box;
+    }
+
+    .submit-feedback {
+      background-color: #1a1919;
+      color: #fffafa;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    
+  </style>
+</head>
+<body>
+
+<div id="navbar">
+  <div id="user-profile">
+    <img id="avatar" src="avatar.png" alt="Avatar">
+    <span>User Name</span>
+  </div>
+ 
+  <button id="new-chat-button" onclick="startNewChat()">
+    <span id="new-chat-icon">➕</span> New Chat
+  </button>
+  <button id="logout-button" onclick="logout()">Logout</button>
+</div>
+
+<div id="chat-container">
+  <div id="messages"></div>
+  <div id="input-container">
+    <input type="text" id="message-input" placeholder="Type your question..." oninput="toggleSendIcon()" onkeyup="checkEnterKey(event)">
+    <div id="send-icon" class="thumb-icon" onclick="sendMessage()">🡩</div>
+
+</div>
+
+
+
+<script>
+  function logout() {
+    // Add your logout logic here
+    alert("Logout clicked");
+  }
+ 
+  function startNewChat() {
+    document.getElementById("messages").innerHTML = "";
+  }
+
+  function sendMessage() {
+    var messageInput = document.getElementById("message-input");
+    var messageText = messageInput.value.trim();
+
+    if (messageText !== "") {
+      var messagesContainer = document.getElementById("messages");
+
+      // Create user message
+      var userMessage = document.createElement("div");
+      userMessage.className = "user-message";
+      userMessage.innerHTML = "<span class='user-icon'><i class='fas fa-user'></i></span> <span class='user-label'><strong>User:</strong></span> " + messageText;
+
+      messagesContainer.appendChild(userMessage);
+
+      // Clear the input field
+      messageInput.value = "";
+
+      // Create response message
+      var responseMessage = document.createElement("div");
+      responseMessage.className = "response-message";
+      responseMessage.innerHTML = "<span class='response-icon'><i class='fas fa-balance-scale'></i></span> <span class='response-label'><strong>LexResearch:</strong></span> " + messageText;
+
+      var likeDislikeContainer = document.createElement("div");
+      likeDislikeContainer.className = "like-dislike";
+
+      var likeIcon = document.createElement("span");
+      likeIcon.className = "thumb-icon";
+      likeIcon.innerHTML = "👍";
+      likeIcon.onclick = function () {
+        showFeedbackPopup("Liked", responseMessage);
+        showJudgmentSection(responseMessage);
+      };
+
+      var dislikeIcon = document.createElement("span");
+      dislikeIcon.className = "thumb-icon";
+      dislikeIcon.innerHTML = "👎";
+      dislikeIcon.onclick = function () {
+        showFeedbackPopup("Disliked", responseMessage);
+        showJudgmentSection(responseMessage);
+      };
+
+      likeDislikeContainer.appendChild(likeIcon);
+      likeDislikeContainer.appendChild(dislikeIcon);
+
+      responseMessage.appendChild(likeDislikeContainer);
+
+      messagesContainer.appendChild(responseMessage);
+
+      // Scroll to the bottom
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+  }
+  function showJudgmentSection(parentElement) {
+    var judgmentSection = document.createElement("div");
+    judgmentSection.innerHTML = "<h2>Do you want judgment in support of your case?</h2>" +
+        "<button id='judgments-button-yes' onclick='handleJudgmentsButtonClick(\"Yes\")'>Yes</button>" +
+        "<button id='judgments-button-no' onclick='handleJudgmentsButtonClick(\"No\")'>No</button>";
+
+    parentElement.appendChild(judgmentSection);
+}
+
+
+  
+
+  function toggleSendIcon() {
+    var messageInput = document.getElementById("message-input");
+    var sendIcon = document.getElementById("send-icon");
+
+    if (messageInput.value.trim() !== "") {
+      sendIcon.classList.add("active");
+    } else {
+      sendIcon.classList.remove("active");
+    }
+  }
+
+  function checkEnterKey(event) {
+    if (event.key === "Enter") {
+      sendMessage();
+      document.getElementById("send-icon").classList.remove("active");
+    }
+  }
+
+  function showFeedbackPopup(feedbackType, messageElement) {
+    var popup = document.createElement("div");
+    popup.className = "feedback-popup";
+
+    var feedbackText = document.createElement("span");
+    feedbackText.textContent = feedbackType;
+
+    var feedbackInput = document.createElement("input");
+    feedbackInput.className = "feedback-input";
+    feedbackInput.placeholder = "Provide additional feedback...";
+
+    var submitButton = document.createElement("button");
+    submitButton.className = "submit-feedback";
+    submitButton.textContent = "Submit";
+    submitButton.onclick = function () {
+      submitFeedback(feedbackType, feedbackInput.value, popup);
+    };
+
+    popup.appendChild(feedbackText);
+    popup.appendChild(feedbackInput);
+    popup.appendChild(submitButton);
+
+    messageElement.appendChild(popup);
+    popup.style.display = "block";
+  }
+
+  function submitFeedback(feedbackType, additionalFeedback, popupElement) {
+    // Add logic to save feedback (e.g., send it to a server)
+    console.log("Feedback Type: " + feedbackType);
+    console.log("Additional Feedback: " + additionalFeedback);
+
+    // Close the popup
+    popupElement.style.display = "none";
+  }
+  
+</script>
+
+</body>
+</html>
