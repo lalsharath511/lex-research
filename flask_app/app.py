@@ -64,7 +64,7 @@ def register():
             flash('Registration successful! You can now log in.', 'success')
             return redirect(url_for('login'))
 
-    return render_template('register.html', form=form)
+    return render_template('sigin.html', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -84,7 +84,7 @@ def login():
         else:
             flash('Login unsuccessful. Please check your username and password.', 'danger')
 
-    return render_template('login.html', form=form)
+    return render_template('signup.html', form=form)
 
 
 @app.route('/logout')
