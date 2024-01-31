@@ -1,0 +1,64 @@
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+.sidebar {
+    background-color: #007bff;
+    color: #fff;
+    height: 100vh;
+    text-align: center;
+    width: 300px;
+    position: fixed;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.single-line {
+    white-space: nowrap;
+}
+.feedback-buttons {
+    display: none;
+    margin-top: 15px;
+}
+
+.question-box {
+    display: none; /* Hide the question box initially */
+}
+.profile img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.dashboard-content {
+    margin-left: 200px; /* Adjust margin-left to match the sidebar width */
+    padding: 20px;
+}
+
+.input-box {
+    margin-bottom: 20px;
+}
+
+.response-box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    text-align: center; /* Center the text inside the response box */
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.bottom-buttons {
+    margin-bottom: 20px;
+}
