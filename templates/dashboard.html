@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <!-- Font Awesome CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+
+   
+    
+    
+ 
+    
+   
+   
+  </head>
+  <body style=" background-color: #333;">
+    <div class="navbar">
+     
+      <a href="#" class="openbtn" onclick="openNav()" title="Expand Menu">☰</a>
+      <img src="static/images/ca.png" alt="Logo" class="logo">
+      <a href="#" class="right" onclick="clearChat()"><b>+</b> New Chat</a>
+    </div>
+
+    <div id="mySidebar" class="sidebar">
+      <a
+        href="javascript:void(0)"
+        class="closebtn"
+        onclick="closeNav()"
+        title="Collapse Menu"
+        >×</a
+      >
+      <div class="profile">
+        {% if 'google_user_info' in session %}
+        <img
+          src="{{ session['google_user_info'].get('picture') }}"
+          alt="User Icon"
+        />
+        <h4>{{ session['google_user_info'].get('name') }}</h4>
+        {% else %}
+        <img
+          src="https://i.ibb.co/d5b84Xw/Untitled-design.png"
+          alt="User Icon"
+        />
+        <h4>{{ username }}</h4>
+        {% endif %}
+      </div>
+
+      <div id="hi" class="user-history">
+        <h2>User History</h2>
+        {% for date_label, queries in grouped_queries.items() %}
+        <h4 style="font-size: 14px">{{ date_label }}</h4>
+        <ul>
+          {% for query in queries[::-1] %} {# Reverse the order of queries #}
+          <li>
+            <div class="history-item-wrapper">
+              <a
+                href="#"
+                class="history-item"
+                data-question="{{ query.question }}"
+                data-response="{{ query.response[0] }}"
+              >
+                {{ query.question_short }}
+              </a>
+
+              <span
+                class="delete-icon"
+                onclick="toggleDeleteOption(this)"
+                title="Click To Delete Chat"
+                >....</span
+              >
+              <button class="delete-button" onclick="deleteQuestion(this)">
+                Delete Chat
+              </button>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        <!-- Debug: Print date_label and number of queries -->
+        <!--<p>{{ date_label }} - Number of queries: {{ queries|length }}</p>-->
+        {% endfor %}
+      </div>
+
+      <div class="bottom-btn">
+        <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+      </div>
+    </div>
+
+    <div id="main-content">
+      <div class="situation">
+        <h3>Context</h3>
+
+        <textarea
+          id="situationInput"
+          name="situation"
+          placeholder="Provide your context here...."
+          class="situation-input"
+        ></textarea>
+        <button
+          class="submit-btn"
+          onclick="sendSituation()"
+          title="Send Context"
+        >
+          Submit
+        </button>
+      </div>
+
+
+      
+      <!-- Add the loading indicator here -->
+      <div
+        id="loadingIndicator"
+        class="loading-indicator"
+        style="display: none"
+      >
+        <div class="spinner-border text-dark" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+        <p>Loading...</p>
+      </div>
+
+      
+      <h3
+        id="recommendationHeading"
+        style="display: none; font-weight: bold; color: white"
+      >
+       Proposal
+      </h3>
+      <div class="response-box">
+        <p id="recommendationOutput"></p>
+
+        <div class="feedback-buttons text-right">
+          <button class="btn" onclick="handleLike()" title="Like">
+            <i class="fas fa-thumbs-up"></i>
+          </button>
+          <button class="btn" onclick="handleDislike()" title="Dislike">
+            <i class="fas fa-thumbs-down"></i>
+          </button>
+          <button class="btn" onclick="provideFeedback()">
+            <b>Additional Feedback</b>
+          </button>
+        </div>
+      </div>
+
+
+      <!-- Question and buttons outside the recommendation box -->
+      <div class="col-md-12 question-box text-center mt-4">
+        <h6 class="white-text">
+          <span class="single-line"
+            ><b>Do you want the judgments in support of your case?</b></span
+          >
+        </h6>
+        <button class="btn btn-yes" onclick="handleYes()">Yes</button>
+        <button class="btn btn-no" onclick="handleNo()">No</button>
+      </div>
+
+ <!-- Print and Share Modal -->
+ <div
+ class="modal fade"
+ id="printShareModal"
+ tabindex="-1"
+ role="dialog"
+ aria-labelledby="printShareModalLabel"
+ aria-hidden="true"
+>
+ <div class="modal-dialog modal-dialog-centered" role="document">
+   <div class="modal-content">
+     <div class="modal-header">
+       <h5 class="modal-title" id="printShareModalLabel">
+         Print or Share
+       </h5>
+       <button
+         type="button"
+         class="close"
+         data-dismiss="modal"
+         aria-label="Close"
+       >
+         <span aria-hidden="true">&times;</span>
+       </button>
+     </div>
+     <div class="modal-body d-flex justify-content-center">
+       <button
+         id="printButton"
+         class="btn btn-dark mr-2"
+         onclick="handlePrintButton()"
+       >
+         <i class="fas fa-print"></i> Print As
+       </button>
+
+       <button
+         id="shareButton"
+         class="btn btn-dark mr-2"
+         onclick="toggleShareOptions()"
+       >
+         <i class="fas fa-share-alt"></i> Share To
+       </button>
+       <!-- Share options dropdown menu -->
+       <div id="shareOptions" style="display: none">
+         <button class="btn btn-dark mr-2" onclick="shareViaGmail()">
+           <i class="fab fa-google"></i>
+           <span>Gmail</span>
+         </button>
+         <button class="btn btn-dark mr-2" onclick="shareViaWhatsApp()">
+           <i class="fab fa-whatsapp"></i>
+           <span>WhatsApp</span>
+         </button>
+       </div>
+       <div id="printOptions" style="display: none">
+         <button class="btn btn-dark mr-2" onclick="printPDF()">
+           <i class="fas fa-file-pdf"></i><span> Pdf</span>
+         </button>
+         <button class="btn btn-dark mr-2" onclick="printDOC()">
+           <i class="fas fa-file-word"></i><span> Doc</span>
+         </button>
+       </div>
+     </div>
+   </div>
+ </div>
+</div>
+
+      
+
+
+
+      <div id="content" style="display: none; font-weight: bold; color: white">
+        <div id="filterButtons">
+            <button onclick="showAllColumns()">Display All</button>
+            <button onclick="toggleColumnFilter()">Display</button>
+        </div>
+    
+        <div id="columnFilter">
+            <div class="checkbox-container">
+                <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="1"> CASE NO.</label>
+                <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="2"> PETITIONER</label>
+                <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="3"> RESPONDENT</label>
+                <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="4"> DATE</label>
+                <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="5"> JUDGE</label>
+                <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="6"> PREDICTION</label>
+                <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="7"> SUMMARY</label>
+                <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="8"> URL</label>
+                <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="9"> CHECKBOX</label>
+                
+            </div>
+        </div>
+    
+        <div class="table-container">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                      <th>CASE NO.</th>
+                      <th>PETITIONER</th>
+                      <th>RESPONDENT</th>
+                      <th>DATE</th>
+                      <th>JUDGE</th>
+                      <th>PREDICTION</th>
+                      <th>SUMMARY</th>
+                      <th>URL</th>
+                      <th>CHECKBOX</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                       
+                        <td><input type="checkbox" class="rowCheckbox"></td>
+                    </tr>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+     <!-- Question and buttons outside the recommendation box -->
+     <div class="col-md-12 questionn-box text-center mt-4">
+      <h6 class="white-text">
+        <span class="single-line"
+          ><b>Do you want the judgments in opposition to the facts for your reference?</b></span
+        >
+      </h6>
+      <button class="btn btn-yess" onclick="handleYess()">Yes</button>
+      <button class="btn btn-noo" onclick="handleNoo()">No</button>
+    </div>
+
+     
+
+      <!-- Print and Share Modal -->
+    <div
+    class="modal fade"
+    id="printtShareModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="printShareModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="printShareModalLabel">
+            Print or Share
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body d-flex justify-content-center">
+          <button
+            id="printtButton"
+            class="btn btn-dark mr-2"
+            onclick="handlePrinttButton()"
+          >
+            <i class="fas fa-print"></i> Print As
+          </button>
+
+          <button
+            id="shareeButton"
+            class="btn btn-dark mr-2"
+            onclick="toggleShareeOptions()"
+          >
+            <i class="fas fa-share-alt"></i> Share To
+          </button>
+          <!-- Share options dropdown menu -->
+          <div id="shareeOptions" style="display: none">
+            <button class="btn btn-dark mr-2" onclick="shareViaGmaill()">
+              <i class="fab fa-google"></i>
+              <span>Gmail</span>
+            </button>
+            <button class="btn btn-dark mr-2" onclick="shareViaWhatsAppp()">
+              <i class="fab fa-whatsapp"></i>
+              <span>WhatsApp</span>
+            </button>
+          </div>
+          <div id="printtOptions" style="display: none">
+            <button class="btn btn-dark mr-2" onclick="printPDFF()">
+              <i class="fas fa-file-pdf"></i><span> Pdf</span>
+            </button>
+            <button class="btn btn-dark mr-2" onclick="printDOCC()">
+              <i class="fas fa-file-word"></i><span> Doc</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+      <!-- Feedback Modal -->
+      <div
+        class="modal fade"
+        id="feedbackModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="feedbackModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="feedbackModalLabel">
+                Provide Feedback
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <textarea
+                class="form-control"
+                id="feedbackInput"
+                rows="4"
+                placeholder="Enter your feedback"
+              ></textarea>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              <button type="button" class="btn btn-dark" data-dismiss="modal">
+                Close
+              </button>
+              <button
+                type="button"
+                class="btn btn-dark"
+                onclick="submitFeedback()"
+              >
+                Submit Feedback
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+
+
+
+
+    </div>
+    
+ 
+        <!-- <button id="theme-toggle-btn">Toggle Theme</button>-->
+ 
+
+    
+     
+    <footer>
+      <hr />
+   <!-- Add this button at the bottom of your HTML, preferably just before the closing body tag -->
+<button id="scrollToTopButton" onclick="scrollToTop()" title="Go to top">&#8593;</button>
+
+    </footer>
+
+  <!-- Bootstrap JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Font Awesome JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+  </body>
+</html>

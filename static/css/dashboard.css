@@ -1,0 +1,861 @@
+body {
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  background-color: #333;
+  overflow-y: hidden;
+}
+
+.navbar {
+   position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000; /* Ensure the navbar stays on top of other content */
+        overflow: hidden;
+        background-color: #111;
+        border-bottom: 1px solid #353232;
+    
+      }
+
+      .navbar a {
+        float: left;
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 4px 12px;
+        text-decoration: none;
+      }
+
+      .navbar a.right {
+        float: right;
+       
+      }
+
+      .navbar a:hover {
+        background-color: #c9c2c2;
+        color: black;
+        border-radius: 5px;
+        text-decoration: none;
+      }
+
+      .sidebar {
+        z-index: 1100;
+        height: 100%;
+        width: 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+      }
+
+      .sidebar .closebtn:hover {
+        color: #f1f1f1;
+        text-decoration: none;
+      }
+
+      .sidebar .closebtn {
+        color: white;
+        position: absolute;
+        top: 0;
+        left: 180px;
+        font-size: 36px;
+        margin-left: 50px;
+        text-decoration: none;
+        transition: 0.3s;
+      }
+
+      .openbtn {
+        font-size: 20px;
+        cursor: pointer;
+        background-color: #111;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        text-decoration: none;
+      }
+
+      .openbtn:hover {
+        background-color: #444;
+        text-decoration: none;
+      }
+
+      #main-content {
+      
+        transition: margin-left 0.5s;
+        padding: 0px 16px 16px 16px; /* Adjusted top padding to accommodate the fixed navbar */
+        margin-bottom: 70px; /* Adjust margin to accommodate the footer */
+        padding-bottom: 70px;
+        overflow-y: auto; /* Enable vertical scrolling */
+        max-height: calc(100vh - 130px);
+        font-family: "Arial", sans-serif;
+      }
+      #main-content.auto-scroll {
+        overflow-y: auto;
+        scroll-behavior: smooth;
+        
+      }
+
+/* CSS for the main content area with autoscroll */
+#main-content::-webkit-scrollbar {
+  width: 11px; /* Width of the scrollbar */
+
+}
+
+/* Track (background) of the scrollbar */
+#main-content::-webkit-scrollbar-track {
+  background-color: #383737;
+ 
+}
+
+/* Handle (thumb) of the scrollbar */
+#main-content::-webkit-scrollbar-thumb {
+  background-color: #1f1d1d; /* Dark gray */
+  border-radius: 6px; /* Adjust border radius */
+  height: 30px; /* Adjust height */
+}
+
+/* Handle on hover */
+#main-content::-webkit-scrollbar-thumb:hover {
+  background-color: #ffffff; /* Black */
+}
+
+      .profile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        color: white;
+      }
+
+      .profile img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+
+        margin-top: -60px;
+        margin-bottom: 10px;
+      }
+
+      .profile h4 {
+        margin: 0;
+        font-size: 18px;
+      }
+     
+      .bottom-btn {
+        position: absolute;
+        bottom: 20px; /* Adjusted bottom margin */
+        width: 100%;
+        text-align: center;
+      }
+
+      .logout-btn {
+        display: inline-block;
+        color: white;
+        text-decoration: none;
+        width: 200px; /* Specify a fixed width for the button */
+        padding: 12px;
+        text-align: center;
+        background:  #333;
+        border-radius: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+
+      .logout-btn:hover {
+        background-color: #c9c2c2;
+        color: black;
+        text-decoration: none;
+      }
+    
+
+      .situation h3 {
+        
+        position: relative;
+        left: -8px;
+        margin: 0;
+        padding: 10px; /* Add padding to the heading */
+        color: white;
+        font-weight: bold;
+      }
+
+
+      .situation-input {
+        width: calc(100% - 2 * 2px); /* Adjust the width as needed */
+        height: 110px; /* Adjust the height as needed */
+        padding: 10px; /* Adjust padding */
+        margin: 0 auto; /* Center the input horizontally */
+        margin-top: 0px;
+        font-size: 18px; /* Adjust font size to be a little bigger */
+ 
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        overflow-y: auto; /* Enable vertical scrolling */
+        resize: none; /* Prevent resizing */
+        position: relative; /* Position textarea relative to its wrapper */
+        
+      }
+
+    .submit-btn {
+        width: 100px;
+        padding: 8px;
+        margin-top: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        font-size: 14px;
+        background: #333;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        outline: auto;
+      }
+
+
+      .submit-btn:hover{
+        background-color: #111;
+        color: white;
+      }
+
+      .submit-btn.active:hover{
+        background-color: #111;
+        color: white;
+      }
+      /* Styling for the submit button when active (text is typed in the textarea) */
+      .submit-btn.active {
+        background-color: #e7ece7;
+        border: 2px solid black;
+        color: black; /* Bright color */
+        font-weight: bold;
+      }
+
+
+      .feedback-buttons {
+        display: none;
+        margin-top: 15px;
+        background-color: transparent;
+
+        color: #000; /* Set text color */
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      /* Change background color and text color on hover */
+      .feedback-buttons .btn:hover {
+        background-color: #000; /* Change background color to black on hover */
+        color: #fff; /* Change text color to white on hover */
+      }
+
+      .question-box {
+        display: none;
+      }
+    
+     .question-box .btn-yes,
+     .question-box .btn-no {
+        color: #fff;
+        font-weight: bold;
+        border: 2px solid #424040;
+        background-color: transparent;
+        margin: 5px; /* Adjust margin as needed */
+        padding: 8px 16px; /* Adjust padding as needed */
+      
+      }
+
+      .questionn-box {
+        display: none;
+      }
+    
+     .questionn-box .btn-yess,
+     .questionn-box .btn-noo {
+        color: #fff;
+        font-weight: bold;
+        border: 2px solid #424042;
+        background-color: transparent;
+        margin: 5px; /* Adjust margin as needed */
+        padding: 8px 16px; /* Adjust padding as needed */
+      
+      }
+
+      .btn-yes:hover,
+      .btn-no:hover {
+        background-color: #fff;
+        color: #000;
+      }
+
+
+      .btn-yess:hover,
+      .btn-noo:hover {
+        background-color: #fff;
+        color: #000;
+      }
+      h3#recommendationHeading {
+   
+        padding-top: 10px;
+      }
+      .response-box {
+      
+        border: 0;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: transparent;
+        text-align: left;
+        transition: border 0.3s;
+        /* Remove fixed height and auto-scroll */
+        /* max-height: 250px; */
+        /* overflow-y: auto; */
+        font-size: 18px;
+      }
+
+      .question-box h6.white-text {
+        color: #fff; /* Set text color to white */
+      }
+
+      #printButton,
+      #shareButton {
+        display: none;
+      }
+      #printtButton,
+      #shareeButton {
+        display: none;
+      }
+
+      #printOptions .btn i {
+        margin-right: 15px; /* Adjust spacing between icon and text */
+      }
+
+      #printtOptions .btn i {
+        margin-right: 15px; /* Adjust spacing between icon and text */
+      }
+
+      footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+       background-color: #333; /* Set background color */
+        color: white; /* Set text color */
+        padding: 10px 0; /* Adjust padding as needed */
+        z-index: 100; /* Ensure footer is above other content */
+      }
+      hr {
+        border: 0;
+        height: 1px;
+        background-color: #444242;
+        margin: 0 auto; /* Center the line */
+        width: 80%; /* Set your desired width */
+      }
+
+
+      .question,
+      .answer {
+        max-height: 100px; /* Adjust as needed */
+        overflow: hidden;
+      }
+
+      #hi {
+        color: white;
+      }
+      .user-history {
+        position: relative;
+        overflow-y: auto;
+        max-height: calc(100% - 160px); /* Adjust height as needed */
+      }
+
+      #hi .question,
+      #hi .answer {
+        color: white; /* Optionally, you can set different text colors for question and answer */
+        background-color: gray;
+      }
+
+      #hi h2 {
+        font-size: 18px; /* Adjust the font size as needed */
+        text-align: center; /* Center align the text */
+        background-color: #333; /* Set the background color */
+        padding: 5px; /* Add padding */
+        width: 90%; /* Adjust the width as needed */
+        margin: 0 auto;
+        margin-bottom: 10px; /* Add some bottom margin */
+        color: white;
+        position: sticky;
+        top: 0;
+        z-index: 1; /*
+  border-radius: 5px;
+  
+}
+
+#hi h4 {
+  font-size: 10px !important; /* Adjust the font size of the date */
+        margin-left: 10px; /* Add some left margin */
+        margin-bottom: 5px; /* Add some bottom margin */
+      }
+
+      #hi ul {
+        list-style-type: none; /* Remove the bullets */
+        padding: 0; /* Remove default padding */
+      }
+
+      #hi ul li {
+        margin-left: 10px; /* Add some left margin */
+        margin-bottom: 10px; /* Add some bottom margin between each question */
+      }
+
+      .history-box {
+        display: inline-block;
+        width: 10px; /* Adjust width as needed */
+        height: 10px; /* Adjust height as needed */
+        border: 1px solid gray; /* Border color and thickness */
+        margin-right: 10px; /* Adjust margin as needed */
+        background-color: transparent; /* Make the background transparent */
+      }
+      #hi .history-item {
+        color: white; /* Set text color to white */
+        text-decoration: none; /* Remove text decoration */
+      }
+
+      .user-history::-webkit-scrollbar {
+        width: 10px; /* Width of the scrollbar */
+        background-color: #111; /* Background color of the scrollbar */
+      }
+
+      .user-history::-webkit-scrollbar-thumb {
+        background-color: #1f1d1d; /* Dark gray */
+        border-radius: 5px; /* Border radius of the scrollbar thumb */
+        height: 5px;
+      }
+      .user-history::-webkit-scrollbar-thumb:hover{
+        background-color: white;
+      }
+
+      .history-item {
+        padding: 10px 20px; /* Adjust padding as needed */
+        margin-bottom: 5px; /* Optional: Add margin-bottom to separate history items */
+        border-radius: 15px; /* Add rounded border */
+        transition: all 0.3s; /* Add transition for smooth hover effect */
+      }
+
+      /* Styles for hover effect */
+      .history-item:hover {
+        background-color: rgba(
+          128,
+          128,
+          128,
+          0.8
+        ); /* Gray color with 80% opacity */
+        padding: 10px 20px; /* Keep the same padding on hover */
+        max-width: 100%; /* Set max-width to 80% on hover */
+        border-radius: 5px; /* Add rounded border */
+      }
+
+      .history-item.active {
+        background-color: #333;
+        display: block;
+        border-radius: 5px;
+        padding-right: 10px; /* Adjust padding-right as needed */
+        margin-right: 10px;
+        padding: 5px 10px; /* Adjust padding as needed */
+        margin-bottom: 5px;
+      }
+
+      .delete-icon,
+      .delete-option {
+        display: none;
+        cursor: pointer;
+        color: #888; /* Default color */
+        font-weight: bold;
+        margin-left: 5px;
+        font-weight: bold;
+      }
+
+      .delete-icon:hover {
+        color: rgb(233, 8, 8); /* Change color on hover */
+        font-weight: bold;
+        display: inline-block;
+      }
+
+      .delete-button {
+        display: none;
+        margin-left: 50px;
+      }
+
+      .history-item-wrapper.active .delete-icon,
+      .history-item-wrapper.active .delete-button {
+        display: inline-block;
+      }
+
+      .loading-indicator {
+        position: absolute;
+        top: calc(50% + 60px); /* Adjust as needed */
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        z-index: 9999; /* Ensure it's above other content */
+        color: #0f0f0f;;
+      }
+    
+      .question-box .single-line {
+        font-size: 18px; /* Adjust the font size for smaller screens */
+      }
+      .questionn-box .single-line {
+        font-size: 18px; 
+        /* Adjust the font size for smaller screens */
+        
+      }
+      .questionn-box h6.white-text {
+        color: #fff; /* Set text color to white */
+      }
+
+      
+
+
+      #scrollToTopButton {
+        position: fixed;
+        bottom: 10px;
+        right: 2px;
+        z-index: 1000;
+        background-color: #111111;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        outline: none; /* Remove default focus outline */
+      }
+      
+      #scrollToTopButton:hover {
+        background-color: #edeff1;
+        color: #0f0f0f;
+        font-weight: bold;
+      }
+      
+      #scrollToTopButton:active {
+        transform: scale(0.9); /* Add a slight scale effect on click */
+      }
+
+      /* styles.css */
+
+/* Light Theme */
+:root {
+  --text-color: #333;
+  --background-color: #fff;
+  /* Define other common properties */
+}
+
+body.light-theme {
+  color: var(--text-color);
+  background-color: var(--background-color);
+  /* Define other styles for light theme */
+}
+
+/* Dark Theme */
+body.dark-theme {
+  --text-color: #fff;
+  --background-color: #333;
+  /* Define other common properties */
+}
+
+
+
+      /* Adjust styles for small screens */
+      @media screen and (max-width: 768px) {
+        .situation h3 {
+          font-size: 20px;
+          left: 0; /* Align to the left for smaller screens */
+          margin-left: -8px; /* Adjust margin-left for smaller screens */
+        }
+
+      
+      
+        h3#recommendationHeading {
+          font-size: 20px; /* Adjust the font size for smaller screens */
+          padding-top: 10px;
+        }
+        .situation-input {
+          font-size: 16px; /* Adjust font size for smaller screens */
+          padding: 20px; /* Adjust padding for smaller screens */
+        }
+       .response-box{
+        font-size: 16px;
+       }
+        .submit-btn {
+          font-size: 12px; /* Adjust font size for smaller screens */
+          padding: 6px; /* Adjust padding for smaller screens */
+          width: 30%; /* Set width to 90% for smaller screens */
+          margin-top: 10px;
+        }
+        .question-box .single-line {
+          font-size: 16px; /* Adjust the font size for smaller screens */
+        }
+        .questionn-box .single-line {
+          font-size: 16px; /* Adjust the font size for smaller screens */
+        }
+
+        /* Adjust sidebar and main content z-index for small screens */
+        .sidebar {
+          z-index: 1100;
+        }
+        #main-content {
+          z-index: 1000;
+        }
+
+        .profile {
+          flex-direction: column;
+          align-items: center;
+          padding: 10px;
+        }
+
+        .profile img {
+          margin-right: 0;
+          margin-bottom: 10px;
+        }
+
+        .logout-btn {
+          padding: 10px 0;
+          width: 180px;
+        }
+
+
+        .feedback-buttons .btn {
+          font-size: 14px; /* Reduce the font size of the feedback buttons */
+          padding: 5px; /* Reduce the padding of the feedback buttons */
+        }
+        .modal-body #feedbackInput {
+          font-size: 14px; /* Reduce the font size of the additional feedback input */
+        }
+
+        #shareOptions {
+          position: absolute; /* Change position to absolute */
+          width: 150px; /* Adjust width as needed */
+          left: 50%; /* Center horizontally */
+          transform: translateX(-50%); /* Center horizontally */
+          top: calc(
+            100% + 10px
+          ); /* Position below the Print and Share buttons */
+          background-color: #fff; /* Adjust background color */
+          border: 1px solid #ccc; /* Add border */
+          padding: 10px; /* Add padding */
+          border-radius: 5px; /* Add border radius */
+          box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Add box shadow */
+          z-index: 1000; /* Ensure it's above other elements */
+        }
+
+        #shareeOptions {
+          position: absolute; /* Change position to absolute */
+          width: 150px; /* Adjust width as needed */
+          left: 50%; /* Center horizontally */
+          transform: translateX(-50%); /* Center horizontally */
+          top: calc(
+            100% + 10px
+          ); /* Position below the Print and Share buttons */
+          background-color: #fff; /* Adjust background color */
+          border: 1px solid #ccc; /* Add border */
+          padding: 10px; /* Add padding */
+          border-radius: 5px; /* Add border radius */
+          box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Add box shadow */
+          z-index: 1000; /* Ensure it's above other elements */
+        }
+
+
+        #shareOptions button {
+          display: block; /* Display buttons as block elements */
+          width: 100%; /* Make buttons full width */
+          text-align: center; /* Align text to the left */
+          margin-bottom: 10px; /* Add margin between buttons */
+        }
+
+        #shareeOptions button {
+          display: block; /* Display buttons as block elements */
+          width: 100%; /* Make buttons full width */
+          text-align: center; /* Align text to the left */
+          margin-bottom: 10px; /* Add margin between buttons */
+        }
+
+        #shareOptions button:last-child {
+          margin-bottom: 0; /* Remove margin from last button */
+        }
+
+        #shareeOptions button:last-child {
+          margin-bottom: 0; /* Remove margin from last button */
+        }
+
+
+        #printOptions {
+          position: absolute;
+          width: 150px;
+          left: 50%;
+          transform: translateX(-50%);
+          top: calc(100% + 10px);
+          background-color: #fff;
+          border: 1px solid #ccc;
+          padding: 10px;
+          border-radius: 5px;
+          box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+          z-index: 1000;
+        }
+
+        #printtOptions {
+          position: absolute;
+          width: 150px;
+          left: 50%;
+          transform: translateX(-50%);
+          top: calc(100% + 10px);
+          background-color: #fff;
+          border: 1px solid #ccc;
+          padding: 10px;
+          border-radius: 5px;
+          box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+          z-index: 1000;
+        }
+
+
+        #printOptions button {
+          display: block;
+          width: 100%;
+          text-align: center;
+          margin-bottom: 10px;
+        }
+        #printtOptions button {
+          display: block;
+          width: 100%;
+          text-align: center;
+          margin-bottom: 10px;
+        }
+
+        #printOptions button:last-child {
+          margin-bottom: 0;
+        }
+       
+        #printtOptions button:last-child {
+          margin-bottom: 0;
+        }
+
+        #scrollToTopButton{
+          width: 30px;
+        height: 30px;
+        font-size: 15px;
+        }
+    
+      }
+
+      @media screen and (max-height: 450px) {
+        .sidebar {
+          padding-top: 15px;
+        }
+        .sidebar a {
+          font-size: 18px;
+        }
+
+      
+      }
+
+      
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px; /* Adjust the value as needed */
+        overflow: hidden;
+    }
+
+    /* Styling for the detailed summary white box */
+.white-box {
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px; /* Adjust the value as needed */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+}
+
+/* Styling for the "Remove" button */
+.remove-summary {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px; /* Adjust the value as needed */
+    cursor: pointer;
+}
+    th, td {
+        border: 1px solid #dddddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+      background-color: #111;
+        color: white;
+    }
+    #filterButtons {
+        margin-bottom: 20px;
+        text-align: right;
+      
+    }
+    #filterButtons button {
+      padding: 8px;
+      background-color: #111;
+      color: white;
+      border-radius: 5px;
+      font-weight: bold;
+  }
+
+  #filterButtons button:hover{
+    background-color: white;
+    color: #111;
+  }
+    #columnFilter {
+        border: 1px solid #ccc;
+        padding: 10px;
+        display: none;
+    }
+    .checkbox-label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    .checkbox-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .table-container {
+        overflow-x: auto;
+    }
+    td{
+    background-color: white;
+    color: #000;
+    font-size: 16px;
+  font-weight: normal;}
+
+/* Zebra striping effect */
+tbody tr:nth-child(odd) td {
+  background-color: #f9f9f9; /* Light background color */
+}
+
+tbody tr:nth-child(even) td {
+  background-color: #e8e8e8; /* Dark background color */
+}
+
+    @media screen and (max-width: 600px) {
+        #columnFilter {
+            font-size: 12px;
+            padding: 5px;
+        }
+        .checkbox-label {
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+    }
+
+    .logo {
+      width: 60px; /* Adjust the width as needed */
+      height: 40px; /* Maintain aspect ratio */
+      justify-content: center;/* Add margin to separate the logo from other navbar elements */
+    }
+
+ 

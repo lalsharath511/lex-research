@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LexResearch</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+</head>
+<body>
+    <div class="glass-container">
+        <header>
+            <img src="static/images/ca.png" alt="LexResearch Logo">
+        </header>
+        <form method="post" action="{{ url_for('register') }}">
+            <h2>Register</h2>
+            <div class="input-container">
+                <i class="fas fa-user"></i>
+                <input type="text" id="username" placeholder="Username" required name="username">
+            </div>
+            <div class="input-container">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Password" required name="password">
+            </div>
+
+            <div class="input-container">
+                <i class="fas fa-phone"></i>
+                
+                <input type="tel" id="phoneno" placeholder="PhoneNo (+91)" required name="phoneno" pattern="^\+91[1-9]\d{9}$" maxlength="13">
+            </div>
+        
+            <input type="submit" class="custom-input" value="Register">
+        </form>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div>
+                    {% for message in messages %}
+                        <div>{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <div class="separator">or</div>
+    <a href="{{ url_for('google_login') }}" class="g-input">Continue with Google</a>
+        <div class="already-member">
+            <p>Already a member? <a href="{{ url_for('login') }}" title="click to login">Login</a></p>
+        </div>
+    </div>
+</body>
+</html>
