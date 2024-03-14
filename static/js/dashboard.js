@@ -327,7 +327,7 @@ $(document).on("click", ".show-summary", function() {
   var detailedSummary = $(this).siblings(".detailed-summary").html();
 
   // Create a new row to display the detailed summary
-  var detailedSummaryRow = $("<tr class='detailed-summary-container'><td colspan='9'><div class='white-box'>" + detailedSummary + "</div><button class='remove-summary'>Remove</button></td></tr>");
+  var detailedSummaryRow = $("<tr class='detailed-summary-container'><td colspan='9'><div class='white-box'>" + detailedSummary + "</div><button class='remove-summary'>Hide</button></td></tr>");
 
   // Insert the new row after the current row
   $(this).closest("tr").after(detailedSummaryRow);
