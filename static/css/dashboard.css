@@ -777,7 +777,7 @@ body.dark-theme {
 .remove-summary {
     margin-top: 10px;
     padding: 5px 10px;
-    background-color: #dc3545;
+  background-color: #1a1919;
     color: white;
     border: none;
     border-radius: 5px; /* Adjust the value as needed */
