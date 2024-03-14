@@ -1112,10 +1112,6 @@ document.querySelectorAll('.rowCheckbox').forEach(function(checkbox) {
 });
 
 
- // jQuery.noConflict();
-  //jQuery(document).ready(function($) {
-      // Your jQuery code using $ here
- // });
 
   
 
