@@ -777,7 +777,7 @@ body.dark-theme {
 .remove-summary {
     margin-top: 10px;
     padding: 5px 10px;
-  background-color: #1a1919;
+    background-color: #1a1919;
     color: white;
     border: none;
     border-radius: 5px; /* Adjust the value as needed */
@@ -852,10 +852,26 @@ tbody tr:nth-child(even) td {
         }
     }
 
+    /* .logo {
+      width: 70px; 
+      height: 60px; 
+      justify-content: center;
+    } */
+
+
     .logo {
-      width: 60px; /* Adjust the width as needed */
-      height: 40px; /* Maintain aspect ratio */
-      justify-content: center;/* Add margin to separate the logo from other navbar elements */
+      width: auto; /* Adjust the width */
+      height: 60px; /* Maintain aspect ratio */
+      display: flex; /* Use flexbox */
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
+     
+      color: rgb(55, 123, 201);
+    }
+    
+    .logo span {
+      font-weight: bold; /* Apply bold font weight */
+      font-size: 23px; /* Adjust font size */
     }
 
  
