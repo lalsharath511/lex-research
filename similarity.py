@@ -50,9 +50,17 @@ class TextMatcher:
         similarity_scores.sort(key=lambda x: x[1], reverse=True)
         
         if not similarity_scores:
-            return [("No similar judgment found", 0)]  # Return a message indicating no similar judgment found
-        
+         # Return an alert message
+         return [("No similar judgment found", 0)]
+
+    # Check if the top similarity score is below a certain threshold
+        if similarity_scores[0][1] < 0.5:  # Adjust threshold as needed
+        # Return an alert message
+         return [("No similar judgment found (below similarity threshold)", 0)]
+
         return similarity_scores[:8]
+    
+
     def get_document_content(self, doc_id):
         document = self.db["meta_data"].find_one({"_id": doc_id})
         if document:
