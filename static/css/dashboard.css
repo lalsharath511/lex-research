@@ -382,15 +382,16 @@ body {
         color: white;
         position: sticky;
         top: 0;
-        z-index: 1; /*
-  border-radius: 5px;
+        z-index: 1; 
+  border-radius: 3px;
   
 }
 
 #hi h4 {
-  font-size: 10px !important; /* Adjust the font size of the date */
+  font-size: 14px !important; /* Adjust the font size of the date */
         margin-left: 10px; /* Add some left margin */
         margin-bottom: 5px; /* Add some bottom margin */
+        color: #b5b3be;
       }
 
       #hi ul {
