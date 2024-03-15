@@ -369,9 +369,10 @@ function handleYes() {
               row += "<td>" + item.date + "</td>";
               row += "<td>" + item.judge + "</td>";
               row += "<td>" + item.prediction + "</td>";
+              
+              row += '<td><a href="' + item.pdf_url + '">PDF</a></td>'; // Link to PDF
               // Add the summary column with a "Show" button and detailed summary
               row += "<td><button class='show-summary'>Show</button><div class='detailed-summary' style='display:none'>" + item.summary + "</div></td>";
-              row += '<td><a href="' + item.pdf_url + '">PDF</a></td>'; // Link to PDF
               row += "<td><input type='checkbox' class='rowCheckbox'></td>"; // Checkbox column
               row += "</tr>";
 
@@ -435,34 +436,24 @@ function printPDF() {
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Printed Content (PDF)</title>
       <style>
-          body {
-              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-              padding: 20px;
-              position: relative; /* Set position relative to enable absolute positioning of watermark */
-          }
-          h3 {
-              color: #333;
-          }
-          p {
-              white-space: pre-wrap;
-          }
-          .watermark {
-              position: absolute;
-              top: 50%; /* Adjust the top position */
-              left: 50%; /* Adjust the left position */
-              transform: translate(-50%, -50%) rotate(-45deg); /* Adjust rotation and positioning */
-              font-size: 20px; /* Adjust font size */
-              opacity: 0.2; /* Adjust opacity */
-              pointer-events: none; /* Ensure the watermark text is not selectable */
-          }
-      </style>
-  </head>
-  <body>
-      <div class="watermark">LEX RES DATA SCIENCE AND ANALYTICS PVT.LTD.</div> <!-- Add watermark text -->
-      <h3>Context:</h3>
-      <p>${situationInput}</p>
-      <h3>Proposal:</h3>
-      <p>${recommendationOutput}</p>
+      body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          padding: 20px;
+      }
+      h3 {
+          color: #333;
+      }
+      p {
+          white-space: pre-wrap;
+      }
+  </style>
+</head>
+<body>
+  <h2>LEX RES DATA SCIENCE AND ANALYTICS PVT.LTD.</h2> <!-- Add company name -->
+  <h3>Context:</h3>
+  <p>${situationInput}</p>
+  <h3>Proposal:</h3>
+  <p>${recommendationOutput}</p>
   </body>
   </html>
 `);
@@ -588,6 +579,7 @@ function shareViaGmail() {
   var mailtoLink = `https://mail.google.com/mail/?view=cm&fs=1&to=&su=${companyName}&body=Context:%0A${situationInput}%0A%0AProposal:%0A${recommendationOutput}%0A%0ASent%20on:%20${currentDate}`;
   window.open(mailtoLink, "_blank");
 }
+
 function shareViaWhatsApp() {
   var companyName = "LEX RES DATA SCIENCE AND ANALYTICS PVT.LTD.";
   var situationInput = encodeURIComponent(
@@ -613,7 +605,7 @@ function shareViaWhatsApp() {
 
 function handleYess() {
   // Implement your logic here
-  alert("Opposition judgment are in progress");
+  alert("Opposition judgment are still in progress");
 }
 
 
@@ -646,7 +638,6 @@ function printPDFF() {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 padding: 20px;
                 position: relative; /* Set position relative to enable absolute positioning of watermark */
-                
             }
             h3 {
                 color: #333;
@@ -659,19 +650,21 @@ function printPDFF() {
             table {
                 border-collapse: collapse;
                 width: 100%;
-                font-size: 16px; /* Adjust font size */
+                font-size: 14px; /* Adjust font size */
+                table-layout: fixed; /* Force the table to have fixed layout */
             }
             th, td {
                 border: 1px solid #ddd;
                 padding: 8px;
                 text-align: left;
+                word-wrap: break-word; /* Allow long words to break and wrap */
             }
             th {
                 background-color: #f2f2f2;
             }
             .summary {
-              font-size: 18px; /* Adjust font size for summary */
-          }
+                font-size: 20px; /* Adjust font size for summary */
+            }
         </style>
     </head>
     <body>
@@ -690,9 +683,9 @@ function printPDFF() {
                     <th>DATE</th>
                     <th>JUDGE</th>
                     <th>PREDICTION</th>
-                    <th>SUMMARY</th>
                     <th>URL</th>
-                    <th>CHECKBOX</th>
+                    <th>SUMMARY</th>
+                  
                 </tr>
             </thead>
             <tbody>
@@ -708,7 +701,8 @@ function printPDFF() {
   printWindow.print();
 }
 
-// Function to get HTML content of selected rows including the summary
+
+// Function to get HTML content of selected rows excluding checkbox rows
 function getSelectedRowsHTML() {
   var selectedRowsHTML = "";
   var table = document.getElementById("dataTable");
@@ -716,9 +710,14 @@ function getSelectedRowsHTML() {
   for (var i = 0; i < rows.length; i++) {
     var checkbox = rows[i].querySelector(".rowCheckbox");
     if (checkbox && checkbox.checked) {
-      // Get summary content for the selected row
-      var summary = rows[i].querySelector(".detailed-summary").innerHTML;
-      selectedRowsHTML += `<tr>${rows[i].innerHTML}</tr><tr><td colspan='9'><h3>Summary</h3>${summary}</td></tr>`;
+      var cells = rows[i].getElementsByTagName("td");
+      // Skip the first cell (checkbox cell) in each row
+      for (var j = 1; j < cells.length; j++) {
+        // Get summary content for the selected row
+        var summary = rows[i].querySelector(".detailed-summary").innerHTML;
+        selectedRowsHTML += `<tr>${rows[i].innerHTML}</tr><tr><td colspan='8'><h3>Summary</h3>${summary}</td></tr>`;
+        break; // Stop iterating through cells once we have added the row without the checkbox column
+      }
     }
   }
   return selectedRowsHTML;
@@ -726,7 +725,6 @@ function getSelectedRowsHTML() {
 
 
 
-// Function to print selected rows along with situationInput and recommendationOutput in DOC format
 function printDOCC() {
   var situationInput = document.getElementById("situationInput").value;
   var recommendationOutput = document.getElementById("recommendationOutput").innerText;
@@ -736,63 +734,79 @@ function printDOCC() {
 
   // Create content with consistent styling
   var content = `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Printed Content (DOC)</title>
-        <style>
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                padding: 20px;
-               
-            }
-            h3 {
-                color: #333;
-                font-size: 22px; /* Adjust font size */
-            }
-            p {
-                white-space: pre-wrap;
-                font-size: 20px; /* Adjust font size */
-            }
-            table {
-                border-collapse: collapse;
-                width: 100%;
-                font-size: 16px; /* Adjust font size */
-            }
-            th, td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: left;
-            }
-            th {
-                background-color: #f2f2f2;
-            }
-            .summary {
-                font-size: 20px; /* Adjust font size for summary */
-            }
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
+      <style>
+          body {
+            
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              padding: 20px;
+              font-size: 16px;
+              position: relative; /* Set position relative to enable absolute positioning of watermark */
+          }
+          h3 {
+              color: #333;
+              font-size: 20px;
+          }
+          p {
+              white-space: pre-wrap;
+              margin-bottom: 10px;
+          }
+          .recommendation {
+              margin-left: 20px; /* Adjust indentation as needed */
+          }
+          .watermark {
+            position: absolute;
+            top: 50%; /* Adjust the top position */
+            left: 50%; /* Adjust the left position */
+            transform: translate(-50%, -50%) rotate(-45deg); /* Adjust rotation and positioning */
+            font-size: 20px; /* Adjust font size */
+            opacity: 0.2; /* Adjust opacity */
+        }
+      table {
+          border-collapse: collapse;
+          width: 100%; /* Adjust the width to fit the page */
+          font-size: 14px; /* Reduce font size for better fit */
+      }
+      th, td {
+          border: 1px solid #ddd;
+          padding: 4px; /* Reduce padding for better fit */
+          text-align: left;
+          max-width: 200px; /* Limit column width */
+          overflow: hidden;
+          word-wrap: break-word; /* Allow long words to break and wrap */
+      }
+      th {
+          background-color: #f2f2f2;
+      }
+      .summary {
+          font-size: 18px;
+      }
         </style>
     </head>
     <body>
-        <div class="watermark">LEX RES DATA SCIENCE AND ANALYTICS PVT.LTD.</div> <!-- Add watermark text -->
-        <h3>Context:</h3>
-        <p>${situationInput}</p>
-        <h3>Proposal:</h3>
-        <p>${recommendationOutput}</p>
-        <h3>Selected Rows:</h3>
+    <div class="watermark">LEX RES DATA SCIENCE AND ANALYTICS PVT.LTD.</div> <!-- Add watermark text -->
+    <h3>Context:</h3>
+    <p>${situationInput}</p>
+    <h3>Proposal:</h3>
+    <div class="recommendation">${recommendationOutput}</div>
+        <h3>Similar Documents:</h3>
         <table>
             <thead>
                 <tr>
-                    <th>CASE NO.</th>
-                    <th>PETITIONER</th>
-                    <th>RESPONDENT</th>
-                    <th>DATE</th>
-                    <th>JUDGE</th>
-                    <th>PREDICTION</th>
-                    <th>SUMMARY</th>
-                    <th>URL</th>
-                    <th>CHECKBOX</th>
+                <th>CASE NO.</th>
+                <th>PETITIONER</th>
+                <th>RESPONDENT</th>
+                <th>DATE</th>
+                <th>JUDGE</th>
+                <th>PREDICTION</th>
+                <th>URL</th>
+                <th>SUMMARY</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -821,6 +835,8 @@ function printDOCC() {
   document.body.removeChild(anchor);
   window.URL.revokeObjectURL(anchor.href);
 }
+
+
 
 
 function handlePrinttButton() {
