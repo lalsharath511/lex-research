@@ -48,6 +48,7 @@ app.config['UPLOAD_FOLDER'] = 'static/info'
 # Google client ID
 
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID', 'your_default_google_client_id')
+
 # Function to check if user is logged in
 def is_logged_in():
      return "username" in session or "google_user_info" in session
@@ -55,7 +56,7 @@ def is_logged_in():
 
 
 
-# RoutesF:\auto\lex-research
+# Routes
 
 def llm_response(prompt):
     embedding_function = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
@@ -74,7 +75,7 @@ def llm_response(prompt):
     template = """SYSTEM: You are an intelligent assistant helping the users with their question based on insident and provide.
 
     Insident: {question}
-    Find Indian act related to the Insident from the context and give a Professional Opinion on income tax useing the context.
+    Find Indian act related to the Insident from the context and give a Professional Opinion on income tax using the context.
     Strictly Use ONLY the following pieces of context to answer the question at the end. Think step-by-step and then answer.
 
     Do not try to make up an answer:
@@ -474,7 +475,7 @@ def handle_yes():
     text_matcher.answer = answer
     top_matches = text_matcher.match_texts()
 
-    if top_matches:
+    if top_matches and top_matches[0][0] != "No similar judgment found":
         # Prepare a list of dictionaries containing document content and scores
         matching_documents = []
         # Collect content for top 8 matching documents
@@ -488,7 +489,8 @@ def handle_yes():
         # Return matching documents
         return jsonify(matching_doc_json)
     else:
-        return 'No similar judgments found.'
+        # Handle case when no similar judgments are found
+        return jsonify({"message": "No similar judgments found."})
 
 
 
