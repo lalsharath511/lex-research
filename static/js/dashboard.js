@@ -356,43 +356,48 @@ function handleYes() {
       contentType: "application/json",
       success: function(response) {
           console.log(response); // Log the response
-          var responseData = JSON.parse(response);
-          var tableBody = $("#dataTable tbody");
-          tableBody.empty(); // Clear existing rows
+          if (response.message && response.message === "No similar judgments found.") {
+              // Handle case when no similar judgments are found
+              alert("No similar judgments found.");
+           
+          } else {
+              var responseData = JSON.parse(response);
+              var tableBody = $("#dataTable tbody");
+              tableBody.empty(); // Clear existing rows
 
-          responseData.forEach(function(item) {
-              // Create a new row
-              var row = "<tr>";
-              row += "<td>" + item.case_no + "</td>";
-              row += "<td>" + item.petitioner + "</td>";
-              row += "<td>" + item["respondent "] + "</td>";
-              row += "<td>" + item.date + "</td>";
-              row += "<td>" + item.judge + "</td>";
-              row += "<td>" + item.prediction + "</td>";
-              
-              row += '<td><a href="' + item.pdf_url + '">PDF</a></td>'; // Link to PDF
-              // Add the summary column with a "Show" button and detailed summary
-              row += "<td><button class='show-summary'>Show</button><div class='detailed-summary' style='display:none'>" + item.summary + "</div></td>";
-              row += "<td><input type='checkbox' class='rowCheckbox'></td>"; // Checkbox column
-              row += "</tr>";
+              responseData.forEach(function(item) {
+                  // Create a new row
+                  var row = "<tr>";
+                  row += "<td>" + item.case_no + "</td>";
+                  row += "<td>" + item.petitioner + "</td>";
+                  row += "<td>" + item["respondent "] + "</td>";
+                  row += "<td>" + item.date + "</td>";
+                  row += "<td>" + item.judge + "</td>";
+                  row += "<td>" + item.prediction + "</td>";
 
-              // Append the row to the table
-              tableBody.append(row);
-          });
+                  row += '<td><a href="' + item.pdf_url + '">PDF</a></td>'; // Link to PDF
+                  // Add the summary column with a "Show" button and detailed summary
+                  row += "<td><button class='show-summary'>Show</button><div class='detailed-summary' style='display:none'>" + item.summary + "</div></td>";
+                  row += "<td><input type='checkbox' class='rowCheckbox'></td>"; // Checkbox column
+                  row += "</tr>";
 
-          // Show the table container
-          $("#content").show();
+                  // Append the row to the table
+                  tableBody.append(row);
+              });
 
+              // Show the table container
+              $("#content").show();
 
-          // Automatically scroll to the bottom of the screen
-          scrollToBottom();
+              // Automatically scroll to the bottom of the screen
+              scrollToBottom();
 
+              // Show the question box and feedback buttons
+              document.querySelector(".questionn-box").style.display = "block";
 
-           // Show the question box and feedback buttons
-           document.querySelector(".questionn-box").style.display = "block";
+              // Automatically scroll to the bottom of the screen
+              scrollToBottom();
+          }
 
-  // Automatically scroll to the bottom of the screen
-          scrollToBottom();
           // Hide loading indicator once response is received
           hideLoadingIndicator();
       },
@@ -404,7 +409,6 @@ function handleYes() {
       }
   });
 }
-
 
 
 
@@ -794,7 +798,7 @@ function printDOCC() {
     <p>${situationInput}</p>
     <h3>Proposal:</h3>
     <div class="recommendation">${recommendationOutput}</div>
-        <h3>Similar Documents:</h3>
+        <h3>Similar Judgment:</h3>
         <table>
             <thead>
                 <tr>
