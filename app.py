@@ -316,7 +316,7 @@ def index():
             elif query_date == today - timedelta(days=1):
                 date_label = 'Yesterday'
             else:
-                date_label = query_date.strftime('%Y-%m-%d')  # Format other dates as desired
+                date_label = query_date.strftime('%d-%m-%Y')  # Format other dates as desired
             grouped_queries.setdefault(date_label, []).append(query)
 
         # Sort grouped queries by date (descending)
