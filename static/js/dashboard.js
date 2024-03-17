@@ -16,12 +16,26 @@ document.addEventListener("DOMContentLoaded", function () {
       // Show the question box
       document.querySelector(".question-box").style.display = "block";
      
-
+        // Remove the table if it is currently displayed
+        hideTable();
+        hideJudgmentsLine();
       // Scroll to the bottom of the main content
       scrollToBottom();
+      
     });
   });
 });
+
+
+// Function to hide the table
+function hideTable() {
+  $("#content").hide();
+ 
+}
+
+function hideJudgmentsLine() {
+  $(".questionn-box").hide();
+}
 
 // Function to scroll to the bottom of the main content
 function scrollToBottom() {
@@ -143,6 +157,7 @@ function sendSituation() {
     })
     .catch((error) => console.error("Error:", error));
 }
+
 
 
 function showLoadingIndicator() {
@@ -359,7 +374,7 @@ function handleYes() {
           if (response.message && response.message === "No similar judgments found.") {
               // Handle case when no similar judgments are found
               alert("No similar judgments found.");
-           
+            
           } else {
               var responseData = JSON.parse(response);
               var tableBody = $("#dataTable tbody");
@@ -388,6 +403,9 @@ function handleYes() {
               // Show the table container
               $("#content").show();
 
+                  // Show the line "Do you want the judgments in opposition to the facts for your reference?"
+              showJudgmentsLine();
+
               // Automatically scroll to the bottom of the screen
               scrollToBottom();
 
@@ -410,7 +428,10 @@ function handleYes() {
   });
 }
 
-
+// Function to show the line "Do you want the judgments in opposition to the facts for your reference?"
+function showJudgmentsLine() {
+  $(".questionn-box").show();
+}
 
 
 function handleNo() {
@@ -500,18 +521,11 @@ function printDOC() {
           .recommendation {
               margin-left: 20px; /* Adjust indentation as needed */
           }
-          .watermark {
-              position: absolute;
-              top: 50%; /* Adjust the top position */
-              left: 50%; /* Adjust the left position */
-              transform: translate(-50%, -50%) rotate(-45deg); /* Adjust rotation and positioning */
-              font-size: 20px; /* Adjust font size */
-              opacity: 0.2; /* Adjust opacity */
-          }
+          
       </style>
   </head>
   <body>
-      <div class="watermark">LEX RES DATA SCIENCE AND ANALYTICS PVT.LTD.</div> <!-- Add watermark text -->
+  <h2>LEX RES DATA SCIENCE AND ANALYTICS PVT.LTD.</h2> <!-- Add company name -->
       <h3>Context:</h3>
       <p>${situationInput}</p>
       <h3>Proposal:</h3>
@@ -528,7 +542,7 @@ function printDOC() {
   anchor.href = window.URL.createObjectURL(blob);
 
   // Set the file name
-  anchor.download = "document.doc";
+  anchor.download = "LexResearch.doc";
 
   // Programmatically click the anchor to trigger the download
   document.body.appendChild(anchor);
@@ -585,19 +599,7 @@ function shareViaGmail() {
 }
 
 function shareViaWhatsApp() {
-  var companyName = "LEX RES DATA SCIENCE AND ANALYTICS PVT.LTD.";
-  var situationInput = encodeURIComponent(
-    document.getElementById("situationInput").value
-  );
-  var recommendationOutput = encodeURIComponent(
-    document.getElementById("recommendationOutput").innerText
-  );
-  var currentDate = new Date().toLocaleString("en-IN", {
-    timeZone: "Asia/Kolkata",
-  }); // Get current date and time in Indian time zone
-  var shareText = `${companyName}%0A%0AContext:%0A${situationInput}%0A%0AProposal:%0A${recommendationOutput}%0A%0ASent%20on:%20${currentDate}`;
-  var whatsappLink = `https://wa.me/?text=${shareText}`;
-  window.open(whatsappLink, "_blank");
+  alert("Sharing to whatsapp is still in progress");
 }
 
 
@@ -645,11 +647,11 @@ function printPDFF() {
             }
             h3 {
                 color: #333;
-                font-size: 22px; /* Adjust font size */
+                font-size: 20px; /* Adjust font size */
             }
             p {
                 white-space: pre-wrap;
-                font-size: 20px; /* Adjust font size */
+                font-size: 18px; /* Adjust font size */
             }
             table {
                 border-collapse: collapse;
@@ -672,7 +674,7 @@ function printPDFF() {
         </style>
     </head>
     <body>
-        <div class="watermark">LEX RES DATA SCIENCE AND ANALYTICS PVT.LTD.</div> <!-- Add watermark text -->
+        <h2>LEX RES DATA SCIENCE AND ANALYTICS PVT.LTD.</h2> <!-- Add company name -->
         <h3>Context:</h3>
         <p>${situationInput}</p>
         <h3>Proposal:</h3>
@@ -686,9 +688,9 @@ function printPDFF() {
                     <th>RESPONDENT</th>
                     <th>DATE</th>
                     <th>JUDGE</th>
-                    <th>PREDICTION</th>
+                    <th>RESULT</th>
                     <th>URL</th>
-                    <th>SUMMARY</th>
+                   
                   
                 </tr>
             </thead>
@@ -705,8 +707,7 @@ function printPDFF() {
   printWindow.print();
 }
 
-
-// Function to get HTML content of selected rows excluding checkbox rows
+// Function to get HTML content of selected rows including detailed summary
 function getSelectedRowsHTML() {
   var selectedRowsHTML = "";
   var table = document.getElementById("dataTable");
@@ -715,12 +716,16 @@ function getSelectedRowsHTML() {
     var checkbox = rows[i].querySelector(".rowCheckbox");
     if (checkbox && checkbox.checked) {
       var cells = rows[i].getElementsByTagName("td");
-      // Skip the first cell (checkbox cell) in each row
-      for (var j = 1; j < cells.length; j++) {
-        // Get summary content for the selected row
-        var summary = rows[i].querySelector(".detailed-summary").innerHTML;
-        selectedRowsHTML += `<tr>${rows[i].innerHTML}</tr><tr><td colspan='8'><h3>Summary</h3>${summary}</td></tr>`;
-        break; // Stop iterating through cells once we have added the row without the checkbox column
+      selectedRowsHTML += "<tr>";
+      for (var j = 0; j < cells.length - 2; j++) { // Exclude the last cell (checkbox cell)
+        selectedRowsHTML += "<td>" + cells[j].innerText + "</td>";
+      }
+      selectedRowsHTML += "</tr>";
+      // Add detailed summary content
+      var summary = rows[i].querySelector(".detailed-summary");
+      if (summary) {
+        selectedRowsHTML += "<tr><td colspan='" + (cells.length - 2) + "'><b>SUMMARY:</b></td></tr>"; // Add heading
+        selectedRowsHTML += "<tr><td colspan='" + (cells.length - 2) + "'>" + summary.innerHTML + "</td></tr>";
       }
     }
   }
@@ -729,12 +734,13 @@ function getSelectedRowsHTML() {
 
 
 
-function printDOCC() {
-  var situationInput = document.getElementById("situationInput").value;
-  var recommendationOutput = document.getElementById("recommendationOutput").innerText;
 
-  // Get selected rows HTML content
-  var selectedRowsHTML = getSelectedRowsHTML();
+
+function printDOCC() {
+  var recommendationOutput = document.getElementById("recommendationOutput").innerHTML;
+  var situationInput = document.getElementById("situationInput").value;
+
+
 
   // Create content with consistent styling
   var content = `
@@ -746,7 +752,6 @@ function printDOCC() {
       <title>Document</title>
       <style>
           body {
-            
               font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
               padding: 20px;
               font-size: 16px;
@@ -757,68 +762,60 @@ function printDOCC() {
               font-size: 20px;
           }
           p {
+            font-size: 18px;
               white-space: pre-wrap;
               margin-bottom: 10px;
           }
           .recommendation {
               margin-left: 20px; /* Adjust indentation as needed */
           }
-          .watermark {
-            position: absolute;
-            top: 50%; /* Adjust the top position */
-            left: 50%; /* Adjust the left position */
-            transform: translate(-50%, -50%) rotate(-45deg); /* Adjust rotation and positioning */
-            font-size: 20px; /* Adjust font size */
-            opacity: 0.2; /* Adjust opacity */
+          table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 14px; /* Adjust font size */
+            table-layout: fixed; /* Force the table to have fixed layout */
         }
-      table {
-          border-collapse: collapse;
-          width: 100%; /* Adjust the width to fit the page */
-          font-size: 14px; /* Reduce font size for better fit */
-      }
-      th, td {
-          border: 1px solid #ddd;
-          padding: 4px; /* Reduce padding for better fit */
-          text-align: left;
-          max-width: 200px; /* Limit column width */
-          overflow: hidden;
-          word-wrap: break-word; /* Allow long words to break and wrap */
-      }
-      th {
-          background-color: #f2f2f2;
-      }
-      .summary {
-          font-size: 18px;
-      }
-        </style>
-    </head>
-    <body>
-    <div class="watermark">LEX RES DATA SCIENCE AND ANALYTICS PVT.LTD.</div> <!-- Add watermark text -->
-    <h3>Context:</h3>
-    <p>${situationInput}</p>
-    <h3>Proposal:</h3>
-    <div class="recommendation">${recommendationOutput}</div>
-        <h3>Similar Judgment:</h3>
-        <table>
-            <thead>
-                <tr>
-                <th>CASE NO.</th>
-                <th>PETITIONER</th>
-                <th>RESPONDENT</th>
-                <th>DATE</th>
-                <th>JUDGE</th>
-                <th>PREDICTION</th>
-                <th>URL</th>
-                <th>SUMMARY</th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                ${selectedRowsHTML} <!-- Insert selected rows HTML content -->
-            </tbody>
-        </table>
-    </body>
-    </html>
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            word-wrap: break-word; /* Allow long words to break and wrap */
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .summary {
+            font-size: 20px; /* Adjust font size for summary */
+        }
+      </style>
+  </head>
+  <body>
+  <h2>LEX RES DATA SCIENCE AND ANALYTICS PVT.LTD.</h2>
+      <h3>Context:</h3>
+      <p>${situationInput}</p>
+      <h3>Proposal:</h3>
+      <div class="recommendation">${recommendationOutput}</div>
+      <h3>Similar Judgment:</h3>
+      <table>
+          <thead>
+              <tr>
+                  <th>CASE NO.</th>
+                  <th>PETITIONER</th>
+                  <th>RESPONDENT</th>
+                  <th>DATE</th>
+                  <th>JUDGE</th>
+                  <th>RESULT</th>
+                  <th>URL</th>
+               
+                
+              </tr>
+          </thead>
+          <tbody>
+              ${getSelectedRowsHTML()} <!-- Get HTML content of selected rows -->
+          </tbody>
+      </table>
+  </body>
+  </html>
   `;
 
   // Create a new Blob object containing the content
@@ -839,7 +836,6 @@ function printDOCC() {
   document.body.removeChild(anchor);
   window.URL.revokeObjectURL(anchor.href);
 }
-
 
 
 
@@ -888,16 +884,16 @@ function shareViaGmaill() {
   }); // Get current date and time in Indian time zone
 
   // Construct the email body with context, proposal, and selected rows
-  var mailtoLink = `https://mail.google.com/mail/?view=cm&fs=1&to=&su=${companyName}&body=Context:%0A${situationInput}%0A%0AProposal:%0A${recommendationOutput}%0A%0ASelected Rows:%0A${selectedRowsHTML}%0A%0ASent%20on:%20${currentDate}`;
+  var mailtoLink = `https://mail.google.com/mail/?view=cm&fs=1&to=&su=${companyName}&body=Context:%0A${situationInput}%0A%0AProposal:%0A${recommendationOutput}%0A%0ASimilar Judgment:%0A${selectedRowsHTML}%0A%0ASent%20on:%20${currentDate}`;
 
   // Open the mailto link in a new tab
-  window.open(mailtoLink, "_blank");
+  window.open(mailtoLink, "_blank"); 
 }
 
 
 // Function to get plain text content of selected rows including the summary
 function getSelecteddRowsHTML() {
- var selectedRowsPlainText = "Selected Rows:\n\n";
+  var selectedRowsPlainText = "Similar Judgment:\n\n";
 
   // Get the table and its rows
   var table = document.getElementById("dataTable");
@@ -906,11 +902,14 @@ function getSelecteddRowsHTML() {
   // Get table headers
   var headers = table.querySelectorAll("th");
   var headerRowData = [];
-  for (var i = 0; i < headers.length; i++) {
+  for (var i = 0; i < headers.length - 2; i++) { // Exclude the last two headers
     headerRowData.push(headers[i].innerText.trim());
   }
-  selectedRowsPlainText += headerRowData.join('\t') + '\n';
 
+   // Add space between headers and data
+   var headerSpacing = Array(headerRowData.length).fill('\t \t');
+   selectedRowsPlainText += headerRowData.join('\t \t') + '\n'; // Headers
+   selectedRowsPlainText += headerSpacing.join('\t \t') + '\n'; // Header spacing
   // Iterate over each row
   for (var i = 0; i < rows.length; i++) {
     var checkbox = rows[i].querySelector(".rowCheckbox");
@@ -918,19 +917,19 @@ function getSelecteddRowsHTML() {
       // Get the cells of the row
       var cells = rows[i].querySelectorAll("td");
 
-      // Extract text content from each cell
+      // Extract text content from each cell except the last two cells
       var rowData = [];
-      for (var j = 0; j < cells.length - 1; j++) { // Exclude the last cell with checkbox
+      for (var j = 0; j < cells.length - 2; j++) { // Exclude the last two cells
         rowData.push(cells[j].innerText.trim());
       }
 
       // Add the row data to the plain text content
-      selectedRowsPlainText += rowData.join('\t') + '\n';
+      selectedRowsPlainText += rowData.join('\t \t') + '\n'; // Add space between cells
     }
   }
 
   // Add a separator before the summaries
-  selectedRowsPlainText += "\nSummaries:\n";
+  selectedRowsPlainText += "\n\nSummaries:\n\n";
 
   // Iterate over each row again to get summaries
   for (var i = 0; i < rows.length; i++) {
@@ -943,26 +942,17 @@ function getSelecteddRowsHTML() {
     }
   }
 
+
+
   return selectedRowsPlainText;
 }
 
 
 
 
+
 function shareViaWhatsAppp() {
-  var companyName = "LEX RES DATA SCIENCE AND ANALYTICS PVT.LTD.";
-  var situationInput = encodeURIComponent(
-    document.getElementById("situationInput").value
-  );
-  var recommendationOutput = encodeURIComponent(
-    document.getElementById("recommendationOutput").innerText
-  );
-  var currentDate = new Date().toLocaleString("en-IN", {
-    timeZone: "Asia/Kolkata",
-  }); // Get current date and time in Indian time zone
-  var shareText = `${companyName}%0A%0AContext:%0A${situationInput}%0A%0AProposal:%0A${recommendationOutput}%0A%0ASent%20on:%20${currentDate}`;
-  var whatsappLink = `https://wa.me/?text=${shareText}`;
-  window.open(whatsappLink, "_blank");
+  alert("Sharing to whatsapp is still in progress");
 }
 
 
@@ -974,14 +964,22 @@ function openNav() {
     document.getElementById("mySidebar").style.zIndex = "1100"; // Ensure sidebar is above main content
     document.getElementById("main-content").style.marginLeft = "0px";
     document.getElementById("main-content").style.zIndex = "1000"; // Lower z-index to be below sidebar
+ 
+
   } else {
     // For larger screens, set the sidebar width to 250px and main content margin-left to 250px
     document.getElementById("mySidebar").style.width = "250px";
     document.getElementById("mySidebar").style.zIndex = "1100"; // Ensure sidebar is above main content
     document.getElementById("main-content").style.marginLeft = "250px";
     document.getElementById("main-content").style.zIndex = "1000"; // Lower z-index to be below sidebar
+ 
   }
+ // Move loading indicator slightly to the right of center within main content
+ var loadingIndicator = document.getElementById("loadingIndicator");
+ var mainContentWidth = document.getElementById("main-content").offsetWidth;
+ loadingIndicator.style.left = (mainContentWidth / 2) + 130 + "px"; // Adjust the value (20px) as needed
 }
+
 
 
 
@@ -990,6 +988,8 @@ function openNav() {
 function closeNav() {
   document.getElementById("mySidebar").style.width = "0";
   document.getElementById("main-content").style.marginLeft = "0";
+    // Reset loading indicator position
+    document.getElementById("loadingIndicator").style.left = "50%";
 }
 
 // Get the textarea element and the submit button
