@@ -54,7 +54,18 @@ def is_logged_in():
      return "username" in session or "google_user_info" in session
 
 
+def parse_llm_response(response):
+    # Remove asterisks from the response
+    response = response.replace('*', '')
+    
+    # Make certain sections bold
+    sections_to_bold = ['Introduction:', 'Factual Background:', 'Legal Analysis:', 'Conclusion:', 'Proposal:']
+    for section in sections_to_bold:
+        response = response.replace(section, f'<b>{section}</b>')
+    
 
+ 
+    return response
 
 # Routes
 
@@ -120,11 +131,13 @@ def llm_response(prompt):
         },
     )
     result = pdf_qa({"query": prompt})
-
+    response_text = result['result']
+    parsed_response = parse_llm_response(response_text)
     
-    # print the answer to the user can be deleted
-    print(result)
-    return result['result'] 
+    # Print the parsed response
+    print("Parsed Response:", parsed_response)
+    
+    return parsed_response
 
 #  result=""" 
 #  **Professional Opinion on Income Tax**
@@ -497,5 +510,7 @@ def handle_yes():
 
 
 
+
 if __name__ == '__main__':
     app.run(debug=True , port=8005)
+
