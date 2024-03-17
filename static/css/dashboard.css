@@ -494,7 +494,7 @@ body {
         transform: translate(-50%, -50%);
         text-align: center;
         z-index: 9999; /* Ensure it's above other content */
-        color: #0f0f0f;;
+        color: #16239b;;
       }
     
       .question-box .single-line {
@@ -743,6 +743,7 @@ body.dark-theme {
         height: 30px;
         font-size: 15px;
         }
+        
     
       }
 
@@ -762,7 +763,7 @@ body.dark-theme {
     table {
         width: 100%;
         border-collapse: collapse;
-        border-radius: 10px; /* Adjust the value as needed */
+        border-radius: 5px; /* Adjust the value as needed */
         overflow: hidden;
     }
 
@@ -874,5 +875,21 @@ tbody tr:nth-child(even) td {
       font-weight: bold; /* Apply bold font weight */
       font-size: 23px; /* Adjust font size */
     }
+    
+    /* CSS to hide additional text on larger screens */
+@media only screen and (min-width: 768px) {
+  .additional-text {
+      display: none;
+  }
+}
+
+/* CSS to show additional text on smaller screens */
+@media only screen and (max-width: 767px) {
+  .additional-text {
+      display: block;
+      font-weight: bold; /* Example styling, adjust as needed */
+      color: white; /* Example styling, adjust as needed */
+  }
+}
 
  
