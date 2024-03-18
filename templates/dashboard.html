@@ -17,12 +17,19 @@
     />
 
    
+    
+    
+ 
+    
+   
+   
   </head>
   <body style=" background-color: #333;">
     <div class="navbar">
      
       <a href="#" class="openbtn" onclick="openNav()" title="Expand Menu">☰</a>
-     <div class="logo">
+      <!--<img src="static/images/logo5.png" alt="Logo" class="logo"> -->
+      <div class="logo">
         <span style="font-weight: bold;">LexResearch</span>
       </div> 
       <a href="#" class="right" onclick="clearChat()"><b>+</b> New Chat</a>
@@ -134,7 +141,7 @@
       </h3>
       <div class="response-box">
         <p id="recommendationOutput"></p>
-
+         
         <div class="feedback-buttons text-right">
           <button class="btn" onclick="handleLike()" title="Like">
             <i class="fas fa-thumbs-up"></i>
@@ -242,8 +249,8 @@
                 <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="4"> DATE</label>
                 <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="5"> JUDGE</label>
                 <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="6"> RESULT</label>
-                <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="7"> SUMMARY</label>
-                <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="8"> URL</label>
+                <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="7"> URL</label>
+                <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="8"> SUMMARY</label>
                 <label class="checkbox-label"><input type="checkbox" class="columnCheckbox" value="9"> CHECKBOX</label>
                 
             </div>
@@ -259,7 +266,7 @@
                       <th>DATE</th>
                       <th>JUDGE</th>
                       <th>RESULT</th>
-                       <th>URL</th>
+                      <th>URL</th>
                       <th>SUMMARY</th>
                       <th>CHECKBOX</th>
                     </tr>
@@ -271,8 +278,14 @@
                     </tr>
                     <!-- Add more rows as needed -->
                 </tbody>
+                <div class="additional-text">
+                  Scroll left to see more case elements...
+                </div>
             </table>
         </div>
+        <div class="additional-text">
+        Scroll the table right to see more case elements...
+      </div>
     </div>
 
 
