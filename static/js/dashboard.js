@@ -668,9 +668,9 @@ function printPDFF() {
             th {
                 background-color: #f2f2f2;
             }
-            .summary {
-                font-size: 20px; /* Adjust font size for summary */
-            }
+            .detailed-summary {
+              font-size: 14px; /* Adjust font size for summary */
+          }
         </style>
     </head>
     <body>
@@ -717,9 +717,21 @@ function getSelectedRowsHTML() {
     if (checkbox && checkbox.checked) {
       var cells = rows[i].getElementsByTagName("td");
       selectedRowsHTML += "<tr>";
-      for (var j = 0; j < cells.length - 2; j++) { // Exclude the last cell (checkbox cell)
-        selectedRowsHTML += "<td>" + cells[j].innerText + "</td>";
-      }
+      for (var j = 0; j < cells.length - 2; j++) {
+        if (j === 6) {
+            // Assuming column 7 is index 6 (zero-based)
+            var anchor = cells[j].querySelector("a"); // Get the anchor tag inside the cell
+            if (anchor) {
+                selectedRowsHTML += "<td><a href='" + anchor.getAttribute("href") + "'>" + anchor.innerText + "</a></td>";
+            } else {
+                selectedRowsHTML += "<td>" + cells[j].innerText + "</td>";
+            }
+        } else {
+            selectedRowsHTML += "<td>" + cells[j].innerText + "</td>";
+        }
+    }
+
+      
       selectedRowsHTML += "</tr>";
       // Add detailed summary content
       var summary = rows[i].querySelector(".detailed-summary");
@@ -780,12 +792,14 @@ function printDOCC() {
             padding: 8px;
             text-align: left;
             word-wrap: break-word; /* Allow long words to break and wrap */
+            width: auto; 
         }
-        th {
+        
+    th {
             background-color: #f2f2f2;
         }
-        .summary {
-            font-size: 20px; /* Adjust font size for summary */
+        .detailed-summary {
+            font-size: 14px; /* Adjust font size for summary */
         }
       </style>
   </head>
@@ -836,7 +850,6 @@ function printDOCC() {
   document.body.removeChild(anchor);
   window.URL.revokeObjectURL(anchor.href);
 }
-
 
 
 function handlePrinttButton() {
