@@ -35,8 +35,8 @@ load_dotenv()
 app = Flask(__name__)
 #client_open_ai = OpenAI(api_key='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')
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'your_default_secret_key')
-client = MongoClient("mongodb://localhost:27017/")
-db = client["len_research"]
+client = MongoClient("mongodb+srv://lalsharath511:Sharathbhagavan15192142@legal.mosm3f4.mongodb.net/")
+db = client["lex_learn"]
 
 
 api_key=os.environ.get('API_KEY', 'your_default_google_client_id')
