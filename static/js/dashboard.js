@@ -840,7 +840,7 @@ function printDOCC() {
   anchor.href = window.URL.createObjectURL(blob);
 
   // Set the file name
-  anchor.download = "document.doc";
+  anchor.download = "LexResearch.doc";
 
   // Programmatically click the anchor to trigger the download
   document.body.appendChild(anchor);
