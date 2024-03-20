@@ -59,9 +59,9 @@ def parse_llm_response(response):
     response = response.replace('*', '')
     
     # Make certain sections bold
-    sections_to_bold = ['Introduction:', 'Factual Background:', 'Legal Analysis:', 'Conclusion:', 'Proposal:']
-    for section in sections_to_bold:
-        response = response.replace(section, f'<b>{section}</b>')
+    # sections_to_bold = ['Introduction:', 'Factual Background:', 'Legal Analysis:', 'Conclusion:', 'Proposal:']
+    # for section in sections_to_bold:
+    #     response = response.replace(section, f'<b>{section}</b>')
     
 
  
