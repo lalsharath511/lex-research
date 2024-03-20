@@ -83,40 +83,38 @@ def llm_response(prompt):
         verbose=True,
     )
 
-    template = """SYSTEM: You are an intelligent assistant helping the users with their question based on insident and provide.
+    template = """Insident: {question}
+Find Indian act related to the Incident from the context and give a Professional Opinion on income tax using t>
+Strictly Use ONLY the following pieces of context to answer the question at the end. Think step-by-step and th>
 
-    Insident: {question}
-    Find Indian act related to the Insident from the context and give a Professional Opinion on income tax using the context.
-    Strictly Use ONLY the following pieces of context to answer the question at the end. Think step-by-step and then answer.
+Do not try to make up an answer:
+- If the answer to the question cannot be determined from the context alone, say "I cannot determine the answe>
+- If the context is empty, just say "I do not know the answer to that."
 
-    Do not try to make up an answer:
-    - If the answer to the question cannot be determined from the context alone, say "I cannot determine the answer to that."
-    - If the context is empty, just say "I do not know the answer to that."
-
-    =============
-    {context}
-    =============
+============
+{context}
+============
 
 
-    Insident: {question}
-    Helpful Answer example:    **Professional Opinion on Income Tax**
+If the user provides a direct question, I will provide a direct answer based solely on the provided context. O>
 
-            1. **Introduction:**
-            Provide an introduction outlining the purpose of the opinion and a brief summary of the issues to be addressed.
+Helpful Answer example:    **Professional Opinion on Income Tax**
 
-            2. **Factual Background:**
-            Describe the relevant facts and circumstances surrounding the issue at hand. This is crucial for understanding the context in which the opinion is being sought.
+        1. **Introduction:**
+        Provide an introduction outlining the purpose of the opinion and a brief summary of the issues to be a>
 
-            3. **Legal Analysis:**
-            Perform a detailed analysis of the relevant provisions of the Income Tax Act, 1961, along with any applicable case law or judicial precedents. Tailor the analysis to the specific situation to provide a clear understanding of how the law applies.
+        2. **Factual Background:**
+        Describe the relevant facts and circumstances surrounding the issue at hand. This is crucial for under>
 
-            4. **Conclusion:**
-            Conclude with a clear and concise summary of the legal position and the recommended course of action based on the analysis. This should be the key takeaway from the opinion.
+        3. **Legal Analysis:**
+        Perform a detailed analysis of the relevant provisions of the Indian Income Tax Act, along with any ap>
 
-            5. **Proposal:**
-            If applicable, provide recommendations for action or further steps that should be taken based on the analysis and conclusion.
+        4. **Conclusion:**
+        Conclude with a clear and concise summary of the legal position and the recommended course of action b>
 
-        """
+        5. **Proposal:**
+        If applicable, provide recommendations for action or further steps that should be taken based on the a>
+ """
     pdf_qa = RetrievalQA.from_chain_type(
         llm=llm,  # use GooglePalm for language modeling
         chain_type="stuff",
