@@ -253,7 +253,7 @@ def google_callback():
  
 
     flow = Flow.from_client_secrets_file(
-    'client_secret_356459053763-d1flmo4pfpakmu6oc36o75tjssoba24n.apps.googleusercontent.com.json',
+    'client_secret_960626495739-n77ppto4jjsebkodcr637rqpdbk4c7cv.apps.googleusercontent.com.json',
     scopes=['openid', 'https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'],
     redirect_uri='http://lexresearch.lexres.co.in/login/google/callback'
 )
