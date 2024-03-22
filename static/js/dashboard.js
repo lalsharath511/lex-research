@@ -333,6 +333,29 @@ function hideRecommendationHeading() {
 }
 
 
+function formatSummaries(summaryData) {
+  var formattedSummary = "";
+  var headingNumberPattern = /^\d+\s+/; // Pattern to match numbers at the beginning of headings
+
+  for (const [_, summary] of Object.entries(summaryData)) {
+    // Split the summary into lines
+    var lines = summary.split("\n");
+
+    // Iterate over each line and remove numbering if present
+    for (const line of lines) {
+      // Remove numbers from the beginning of the line
+      var cleanLine = line.replace(headingNumberPattern, '');
+
+      // Append the cleaned line to the formatted summary
+      formattedSummary += cleanLine + "<br>";
+    }
+    formattedSummary += "<br>";
+  }
+
+  return formattedSummary;
+}
+
+
 // Add a click event listener to the "Show" buttons
 $(document).on("click", ".show-summary", function() {
   // Hide any previously displayed detailed summaries
@@ -392,7 +415,12 @@ function handleYes() {
 
                   row += '<td><a href="' + item.pdf_url + '">PDF</a></td>'; // Link to PDF
                   // Add the summary column with a "Show" button and detailed summary
-                  row += "<td><button class='show-summary'>Show</button><div class='detailed-summary' style='display:none'>" + item.summary + "</div></td>";
+                  //row += "<td><button class='show-summary'>Show</button><div class='detailed-summary' style='display:none'>" + item.summary + "</div></td>";
+
+                  var formattedSummary = formatSummaries(item.summary);
+
+                   // Add     the summary column with a "Show" button and detailed summary
+                  row +=   "<td><button class='show-summary'>Show</button><div class='detailed-summary' style='display:none'>" + formattedSummary + "</div></td>";
                   row += "<td><input type='checkbox' class='rowCheckbox'></td>"; // Checkbox column
                   row += "</tr>";
 
