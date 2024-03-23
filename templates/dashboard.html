@@ -235,6 +235,8 @@
 
 
 
+     
+
       <div id="content" style="display: none; font-weight: bold; color: white">
         <div id="filterButtons">
             <button onclick="showAllColumns()">Display All</button>
@@ -268,6 +270,7 @@
                       <th>RESULT</th>
                       <th>URL</th>
                       <th>SUMMARY</th>
+                     
                       <th>CHECKBOX</th>
                     </tr>
                 </thead>
@@ -278,27 +281,27 @@
                     </tr>
                     <!-- Add more rows as needed -->
                 </tbody>
-               
+                
             </table>
         </div>
         <div class="additional-text">
         Scroll the table left to see more case elements...
       </div>
+      <div class="col-md-12 questionn-box text-center mt-4">
+        <h6 class="white-text">
+          <span class="single-line"
+            ><b>Do you want the judgments in opposition to the facts for your reference?</b></span
+          >
+        </h6>
+        <button class="btn btn-yess" onclick="handleYess()">Yes</button>
+        <button class="btn btn-noo" onclick="handleNoo()">No</button>
+      </div>
+  
     </div>
 
 
 
-     <!-- Question and buttons outside the recommendation box -->
-     <div class="col-md-12 questionn-box text-center mt-4">
-      <h6 class="white-text">
-        <span class="single-line"
-          ><b>Do you want the judgments in opposition to the facts for your reference?</b></span
-        >
-      </h6>
-      <button class="btn btn-yess" onclick="handleYess()">Yes</button>
-      <button class="btn btn-noo" onclick="handleNoo()">No</button>
-    </div>
-
+    
      
 
       <!-- Print and Share Modal -->
