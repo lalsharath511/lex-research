@@ -317,6 +317,16 @@ def index():
         # Filter queries to keep only those within the last two weeks
         query_history = [query for query in query_history if query.get('date') > two_weeks_ago]
 
+
+          # If query history is empty, initialize it with a default welcome message
+        if not query_history:
+            default_query = {
+                'question': 'Welcome to the chat!',
+                'response': ['Hello! How can I assist you today?'],
+                'date': datetime.now()
+            }
+            query_history.append(default_query)
+
         # Group queries by date and sort them
         grouped_queries = {}
         today = datetime.now().date()
