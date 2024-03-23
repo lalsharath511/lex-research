@@ -1,41 +1,74 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const historyItems = document.querySelectorAll(".history-item");
-  historyItems.forEach(function (item) {
-    item.addEventListener("click", function (event) {
-      event.preventDefault();
-      const question = this.getAttribute("data-question");
-      const response = this.getAttribute("data-response");
-      // Populate the context and recommendation boxes
-      document.getElementById("situationInput").value = question;
-      document.getElementById("recommendationOutput").innerText =
-        response;
-      // Show the recommendation heading
-      showRecommendationHeading();
-      // Add border to the response box
-      showResponseBoxBorder();
+  // Add click event listener to all history items
+  document.querySelectorAll(".history-item").forEach(function (item) {
+      item.addEventListener("click", function (event) {
+          event.preventDefault();
+          const question = this.getAttribute("data-question");
+          const response = this.getAttribute("data-response");
+          // Populate the context and recommendation boxes
+          document.getElementById("situationInput").value = question;
+          document.getElementById("recommendationOutput").innerText = response;
+          // Show the recommendation heading
+          showRecommendationHeading();
+          // Add border to the response box
+          showResponseBoxBorder();
+          // Show the question box
+          document.querySelector(".question-box").style.display = "block";
+          // Hide the table
+          hideTable();
+          // Hide loading indicator in case of error
+          hideLoadingIndicator();
+          // Scroll to the bottom of the main content
+          scrollToBottom();
+          // Remove active class from all history items
+          document.querySelectorAll(".history-item").forEach(function (item) {
+              item.classList.remove("active");
+          });
+          // Add active class to the clicked history item
+          this.classList.add("active");
+      });
+  });
+
+  // Add click event listener to the "Yes" button
+  document.querySelector(".btn-yes").addEventListener("click", function () {
+      // Call handleYes() function to display the table
+      handleYes();
       // Show the question box
       document.querySelector(".question-box").style.display = "block";
-     
-        // Remove the table if it is currently displayed
-        hideTable();
-        hideJudgmentsLine();
-      // Scroll to the bottom of the main content
-      scrollToBottom();
-      
-    });
   });
+
+  // Function to hide the table
+  function hideTable() {
+      document.getElementById("content").style.display = "none";
+  }
+
+  // Add mouseenter and mouseleave event listeners to history item wrappers
+  document.querySelectorAll(".history-item-wrapper").forEach(function (item) {
+      item.addEventListener("mouseenter", function (event) {
+          var deleteIcon = this.querySelector(".delete-icon");
+          deleteIcon.style.display = "inline";
+      });
+      item.addEventListener("mouseleave", function (event) {
+          var deleteIcon = this.querySelector(".delete-icon");
+          deleteIcon.style.display = "none";
+      });
+  });
+
+  // Automatically trigger click event to set the new question as active
+  addToHistory(situationInput, data.recommendation);
 });
 
 
-// Function to hide the table
-function hideTable() {
-  $("#content").hide();
- 
-}
 
-function hideJudgmentsLine() {
-  $(".questionn-box").hide();
-}
+// // Function to hide the table
+// function hideTable() {
+//   $("#content").hide();
+ 
+// }
+
+// function hideJudgmentsLine() {
+//   $(".questionn-box").hide();
+// }
 
 // Function to scroll to the bottom of the main content
 function scrollToBottom() {
@@ -44,37 +77,9 @@ function scrollToBottom() {
    
  }
 
-document.addEventListener("DOMContentLoaded", function () {
-  var historyItems = document.querySelectorAll(".history-item");
 
-  historyItems.forEach(function (item) {
-    item.addEventListener("click", function (event) {
-      // Remove active class from all history items
-      historyItems.forEach(function (item) {
-        item.classList.remove("active");
-      });
 
-      // Add active class to the clicked history item
-      this.classList.add("active");
-    });
-  });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-  var historyItems = document.querySelectorAll(".history-item-wrapper");
-
-  historyItems.forEach(function (item) {
-    item.addEventListener("mouseenter", function (event) {
-      var deleteIcon = this.querySelector(".delete-icon");
-      deleteIcon.style.display = "inline";
-    });
-
-    item.addEventListener("mouseleave", function (event) {
-      var deleteIcon = this.querySelector(".delete-icon");
-      deleteIcon.style.display = "none";
-    });
-  });
-});
+ 
 
 // Function to toggle delete option visibility
 function toggleDeleteOption(deleteIcon) {
@@ -101,6 +106,20 @@ function deleteQuestion(deleteOption) {
       if (xhr.status === 200) {
         // Successfully deleted the question, remove it from the UI
         historyItemWrapper.parentNode.removeChild(historyItemWrapper);
+        
+        // Clear the context and proposal in the main content
+        document.getElementById("situationInput").value = "";
+        document.getElementById("recommendationOutput").innerText = "";
+        resetResponseBoxBorder();
+
+        // Hide the recommendation heading
+        hideRecommendationHeading();
+        
+        clearTable();
+        // Hide the question box and feedback buttons
+        document.querySelector(".question-box").style.display = "none";
+       
+        document.querySelector(".feedback-buttons").style.display = "none";
       } else {
         // Handle error response
         console.error("Failed to delete question:", xhr.responseText);
@@ -153,9 +172,62 @@ function sendSituation() {
       // Automatically scroll down with smooth behavior
       mainContent.classList.add("auto-scroll");
 
-      
+      // Add the new question to the user's history
+      addToHistory(situationInput, data.recommendation);
     })
     .catch((error) => console.error("Error:", error));
+}
+
+// Function to add a new question to the user's history
+function addToHistory(question, response) {
+  // Create a new history item element
+  var newHistoryItem = document.createElement("li");
+  newHistoryItem.innerHTML = `
+    <div class="history-item-wrapper">
+      <a href="#" class="history-item" data-question="${question}" data-response="${response}">
+        ${question.substring(0, 21)}
+      </a>
+      <span class="delete-icon" onclick="toggleDeleteOption(this)" title="Click To Delete Chat">....</span>
+      <button class="delete-button" onclick="deleteQuestion(this)">Delete Chat</button>
+    </div>
+  `;
+
+  // Attach click event listener to the history item
+  var historyItemAnchor = newHistoryItem.querySelector('.history-item');
+  historyItemAnchor.addEventListener('click', function(event) {
+    event.preventDefault();
+    const question = this.getAttribute("data-question");
+    const response = this.getAttribute("data-response");
+    // Populate the context and recommendation boxes
+    document.getElementById("situationInput").value = question;
+    document.getElementById("recommendationOutput").innerText = response;
+    
+    // Show the recommendation heading
+    showRecommendationHeading();
+    // Add border to the response box
+    showResponseBoxBorder();
+    // Show the question box
+    document.querySelector(".question-box").style.display = "block";
+    // Remove the table if it is currently displayed
+
+    
+    // Scroll to the bottom of the main content
+    scrollToBottom();
+    // Remove active class from all history items
+    var allHistoryItems = document.querySelectorAll(".history-item");
+    allHistoryItems.forEach(function (item) {
+      item.classList.remove("active");
+    });
+    // Add active class to the clicked history item
+    this.classList.add("active");
+  });
+
+  // Insert the new history item at the top of the user's history list
+  var userHistory = document.querySelector(".user-history ul");
+  userHistory.insertBefore(newHistoryItem, userHistory.firstChild);
+
+  // Automatically trigger click event to set the new question as active
+  historyItemAnchor.click();
 }
 
 
@@ -257,7 +329,7 @@ function clearChat() {
   document.querySelector(".question-box").style.display = "none";
   document.querySelector(".feedback-buttons").style.display = "none";
  // Hide the question box and feedback buttons
- document.querySelector(".questionn-box").style.display = "none";
+ 
   // Reset the border of the response box to 0
   resetResponseBoxBorder();
 
@@ -283,10 +355,12 @@ function clearChat() {
   hideprinttOptions();
 }
 function clearTable() {
-  // Get the table body element
-  var tableBody = document.querySelector("#content");
+  // Hide the table content
+  var tableContent = document.getElementById("content");
+  tableContent.style.display = "none";
 
-  // Remove all child elements (rows) from the table body
+  // Clear the table body
+  var tableBody = document.querySelector("#dataTable tbody");
   tableBody.innerHTML = "";
 }
 
@@ -332,7 +406,6 @@ function hideRecommendationHeading() {
   recommendationHeading.style.display = "none";
 }
 
-
 function formatSummaries(summaryData) {
   var formattedSummary = "";
   var headingNumberPattern = /^\d+\s+/; // Pattern to match numbers at the beginning of headings
@@ -377,6 +450,7 @@ $(document).on("click", ".remove-summary", function() {
   $(this).closest(".detailed-summary-container").remove();
 });
 
+
 function handleYes() {
   // Show loading indicator while waiting for response
   showLoadingIndicator();
@@ -397,7 +471,6 @@ function handleYes() {
           if (response.message && response.message === "No similar judgments found.") {
               // Handle case when no similar judgments are found
               alert("No similar judgments found.");
-            
           } else {
               var responseData = JSON.parse(response);
               var tableBody = $("#dataTable tbody");
@@ -412,15 +485,14 @@ function handleYes() {
                   row += "<td>" + item.date + "</td>";
                   row += "<td>" + item.judge + "</td>";
                   row += "<td>" + item.prediction + "</td>";
-
                   row += '<td><a href="' + item.pdf_url + '">PDF</a></td>'; // Link to PDF
-                  // Add the summary column with a "Show" button and detailed summary
-                  //row += "<td><button class='show-summary'>Show</button><div class='detailed-summary' style='display:none'>" + item.summary + "</div></td>";
 
+                  // Parse and format the summary data
                   var formattedSummary = formatSummaries(item.summary);
 
-                   // Add     the summary column with a "Show" button and detailed summary
-                  row +=   "<td><button class='show-summary'>Show</button><div class='detailed-summary' style='display:none'>" + formattedSummary + "</div></td>";
+                  // Add the summary column with a "Show" button and detailed summary
+                  row += "<td><button class='show-summary'>Show</button><div class='detailed-summary' style='display:none'>" + formattedSummary + "</div></td>";
+
                   row += "<td><input type='checkbox' class='rowCheckbox'></td>"; // Checkbox column
                   row += "</tr>";
 
@@ -431,14 +503,10 @@ function handleYes() {
               // Show the table container
               $("#content").show();
 
-                  // Show the line "Do you want the judgments in opposition to the facts for your reference?"
-              showJudgmentsLine();
+              
 
-              // Automatically scroll to the bottom of the screen
-              scrollToBottom();
-
-              // Show the question box and feedback buttons
-              document.querySelector(".questionn-box").style.display = "block";
+              // Show the .questionn-box only if the table content is displayed
+              showQuestionnBoxIfTableDisplayed();
 
               // Automatically scroll to the bottom of the screen
               scrollToBottom();
@@ -456,11 +524,11 @@ function handleYes() {
   });
 }
 
-// Function to show the line "Do you want the judgments in opposition to the facts for your reference?"
-function showJudgmentsLine() {
-  $(".questionn-box").show();
+function showQuestionnBoxIfTableDisplayed() {
+  if ($("#content").is(":visible")) {
+      $(".questionn-box").show();
+  }
 }
-
 
 function handleNo() {
   // Open a modal pop-up for print and share options
