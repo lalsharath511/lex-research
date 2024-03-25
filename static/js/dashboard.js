@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", function () {
           showRecommendationHeading();
           // Add border to the response box
           showResponseBoxBorder();
+
+          document.querySelector(".feedback-buttons").style.display = "none";
           // Show the question box
           document.querySelector(".question-box").style.display = "block";
           
