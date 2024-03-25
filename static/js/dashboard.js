@@ -14,10 +14,11 @@ document.addEventListener("DOMContentLoaded", function () {
           showResponseBoxBorder();
           // Show the question box
           document.querySelector(".question-box").style.display = "block";
-          // Hide the table
-          hideTable();
+          
           // Hide loading indicator in case of error
           hideLoadingIndicator();
+
+          clearTable()
           // Scroll to the bottom of the main content
           scrollToBottom();
           // Remove active class from all history items
@@ -37,10 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.querySelector(".question-box").style.display = "block";
   });
 
-  // Function to hide the table
-  function hideTable() {
-      document.getElementById("content").style.display = "none";
-  }
+
 
   // Add mouseenter and mouseleave event listeners to history item wrappers
   document.querySelectorAll(".history-item-wrapper").forEach(function (item) {
@@ -210,6 +208,7 @@ function addToHistory(question, response) {
     document.querySelector(".question-box").style.display = "block";
     // Remove the table if it is currently displayed
 
+    clearTable()
     
     // Scroll to the bottom of the main content
     scrollToBottom();
