@@ -5,111 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LexResearch</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    /* Custom CSS */
-    body{
-      background-color: #333;
-    }
-    .navbar {
-      background-color: #111; /* dark grey */
-    }
-  
-    .welcome-section {
-      margin-top: 100px;
-      text-align: center;
-      padding: 50px 0;
-    }
-  .footer {
-      background-color: #333;
-      color: #ffffff;
-      text-align: center;
-      padding: 10px 0;
-      position: fixed;
-      width: 100%;
-      bottom: 0;
-    }
-    h1 {
-        font-family: Arial, sans-serif; /* Change font family */
-        font-weight: bold; /* Set font weight to bold */
-        color: white;
-    }
-    p{
-      color: white;
-    }
-
-  
-    .btn {
-        position: relative;
-        padding: 3px 20px; /* Change this as needed */
-        width: 110px; /* Set width */
-        height: 40px; /* Set height */
-        margin: 10px; /* Add margin */
-        overflow: hidden;
-        background: transparent;
-        border: 2px solid white;
-        transition: all 0.4s ease-out;
-        color: #ffffff;
-        font-weight: bold;
-    }
-
-    /* Add hover effect for buttons */
-    .btn::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background-color: rgb(2, 2, 2);
-        transition: all 0.4s ease-out;
-        z-index: -1;
-    }
-
-    .btn:hover::before {
-        left: 0;
-    }
-
-    .btn:hover {
-        color: #fffafa; /* Change button text color on hover */
-    }
-
-   
-    .navbar-nav .nav-link[href="#"] {
-        color: white;
-        outline: 2px solid white; /* Add outline border */
-        padding: 6px 15px; /* Adjust padding to accommodate the outline */
-        border-radius: 5px;
-         font-weight: bold;
-         z-index: -1;
-    }
-    /* Add slide-in fill color effect on hover */
-    .nav-link::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background-color: white;
-        transition: left 0.3s ease;
-        z-index: -1; /* Ensure the pseudo-element is behind the text */
-    }
-
-    .nav-link:hover::before {
-        left: 0;
-    }
-
-    
-    @media (max-width: 768px) {
-      h1, h2, h3, h4, h5, h6, p, .footer {
-        font-size: 18px;
-      }
-
-      p, .footer {
-        font-size: 15px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/front.css') }}">
 </head>
 <body>
 
@@ -139,7 +35,7 @@
 <section class="welcome-section">
   <div class="container">
     <h1>Welcome to LexResearch !</h1>
-    <p>Income Tax Proposal Generator, exclusively designed for Chartered Accountants..</p>
+    <p>Your AI research assistant</p>
     <button class="btn  btn-lg" id="signUpBtn" onclick="redirectTo('/register/')">Register</button>
     <button class="btn btn-lg" id="signInBtn" onclick="redirectTo('/login/')">Login</button>
   </div>
