@@ -696,7 +696,7 @@ function shareViaGmail() {
 }
 
 function shareViaWhatsApp() {
-  alert("Sharing to whatsapp is still in progress");
+  alert("Share to WhatsApp feature will be available soon.");
 }
 
 
@@ -1062,7 +1062,7 @@ function getSelecteddRowsHTML() {
 
 
 function shareViaWhatsAppp() {
-  alert("Sharing to whatsapp is still in progress");
+  alert("Share to WhatsApp feature will be available soon.");
 }
 
 
