@@ -708,9 +708,9 @@ function shareViaWhatsApp() {
 
 function handleYess() {
   // Implement your logic here
-  alert("Opposition judgment are still in progress");
-}
+  alert("Dear User,\n\nWe know how important it is to understand the opposite side. Since we are currently working with limited resources, we are unable to offer judgements that were decided in favour of the opposite party. Rest assured, you will soon be able to use this feature.\n\nThank you,\n\nTeam Lex Res");
 
+}
 
 function handleNoo() {
   // Open a modal pop-up for print and share options
