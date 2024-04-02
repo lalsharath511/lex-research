@@ -34,9 +34,9 @@ projection = {"title": 1, "html_content": 1, "_id": 0}  # 1 means include, 0 mea
 result = collection.find({}, projection)
 data=[]
 for document in result:
-    if document['title']:
-        if document['html_content'] != "":
-            data.append(Document(page_content=f"{document['title']}{document['html_content']}", metadata={"source":document['title']}))
+    if 'title' in document and document['title'] and 'html_content' in document and document['html_content'] != "":
+        data.append(Document(page_content=f"{document['title']}{document['html_content']}", metadata={"source": document['title']}))
+
     # item={"page_content":f"{document['title']}{document['html_content']}"}
    
     
