@@ -84,36 +84,33 @@ def llm_response(prompt):
     )
 
     template = """Insident: {question}
-Find Indian act related to the Incident from the context and give a Professional Opinion on income tax using t>
-Strictly Use ONLY the following pieces of context to answer the question at the end. Think step-by-step and th>
+Provide a professional opinion on income tax related to the incident described in the context. Strictly utilize the provided context to formulate your response, adhering to a step-by-step analytical approach.
 
-Do not try to make up an answer:
-- If the answer to the question cannot be determined from the context alone, say "I cannot determine the answe>
-- If the context is empty, just say "I do not know the answer to that."
+Instructions:
 
+Context Analysis:
+Examine the provided context thoroughly to grasp the details of the incident and its relevance to income tax.
+
+Identification of Indian Act:
+Identify the Indian act relevant to the incident within the context and analyze its provisions in relation to income tax implications.
+
+Professional Opinion Structure:
+Construct your response following the outlined structure:
+
+Introduction: Introduce the purpose of the opinion and briefly summarize the issues involved.
+Factual Background: Describe the pertinent facts and circumstances from the context.
+Legal Analysis: Analyze the relevant sections of the Indian Income Tax Act and applicable regulations.
+Conclusion: Summarize the legal position and recommend potential courses of action.
+Proposal: Offer any recommendations for further steps based on the analysis.
+Guidelines:
+
+Only base your response on the provided context; refrain from speculating or inventing details.
+If the context is insufficient to answer the question, explicitly state so.
+Maintain professionalism and clarity in your analysis and recommendations.
 ============
-{context}
+context: {context}
 ============
 
-
-If the user provides a direct question, I will provide a direct answer based solely on the provided context. O>
-
-Helpful Answer example:    **Professional Opinion on Income Tax**
-
-        1. **Introduction:**
-        Provide an introduction outlining the purpose of the opinion and a brief summary of the issues to be a>
-
-        2. **Factual Background:**
-        Describe the relevant facts and circumstances surrounding the issue at hand. This is crucial for under>
-
-        3. **Legal Analysis:**
-        Perform a detailed analysis of the relevant provisions of the Indian Income Tax Act, along with any ap>
-
-        4. **Conclusion:**
-        Conclude with a clear and concise summary of the legal position and the recommended course of action b>
-
-        5. **Proposal:**
-        If applicable, provide recommendations for action or further steps that should be taken based on the a>
  """
     pdf_qa = RetrievalQA.from_chain_type(
         llm=llm,  # use GooglePalm for language modeling
