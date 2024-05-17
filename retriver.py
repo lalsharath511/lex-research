@@ -36,6 +36,8 @@ data=[]
 for document in result:
     if 'title' in document and document['title'] and 'html_content' in document and document['html_content'] != "":
         data.append(Document(page_content=f"{document['title']}{document['html_content']}", metadata={"source": document['title']}))
+    else:
+         data.append(Document(page_content=f"{document['html_content']}", metadata={"source": "unknown}))
 
     # item={"page_content":f"{document['title']}{document['html_content']}"}
    
