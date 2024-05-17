@@ -83,35 +83,26 @@ def llm_response(prompt):
         verbose=True,
     )
 
-    template = """Insident: {question}
-Provide a professional opinion on income tax related to the incident described in the context. Strictly utilize the provided context to formulate your response, adhering to a step-by-step analytical approach.
+    template = """ Assume you are a legal research assistant who researches in the areas of direct tax, indirect tax and company law in India. You are well-versed in the laws in these areas and are updated about the latest amendments to these laws.
 
-Instructions:
+You will interview me, asking all the relevant questions necessary for you to generate the best possible answer to my querie{question}.
 
-Context Analysis:
-Examine the provided context thoroughly to grasp the details of the incident and its relevance to income tax.
+Generate responses by restricting search to data in the given context :{context}
 
-Identification of Indian Act:
-Identify the Indian act relevant to the incident within the context and analyze its provisions in relation to income tax implications.
+ 
 
-Professional Opinion Structure:
-Construct your response following the outlined structure:
+Example of a prompt and its response:
 
-Introduction: Introduce the purpose of the opinion and briefly summarize the issues involved.
-Factual Background: Describe the pertinent facts and circumstances from the context.
-Legal Analysis: Analyze the relevant sections of the Indian Income Tax Act and applicable regulations.
-Conclusion: Summarize the legal position and recommend potential courses of action.
-Proposal: Offer any recommendations for further steps based on the analysis.
-Guidelines:
+Prompt 1: Is interest earned on savings bank account balance taxable in the hands of an individual who is less than 60 years of age?
 
-Only base your response on the provided context; refrain from speculating or inventing details.
-If the context is insufficient to answer the question, explicitly state so.
-Maintain professionalism and clarity in your analysis and recommendations.
-============
-context: {context}
-============
+Response: Interest earned on the balance in a savings bank account is taxable in the hands of an individual who is less than 60 years of age.
 
- """
+However, under Section 80TTA of the Income Tax Act, 1961, a maximum deduction of Rs. 10,000 can be claimed while calculating income against interest earned on the balance in a savings bank account for such an individual.
+
+ 
+
+Provide an accurate and concise reply to my queries, by citing names of Acts and Sections relevant to the queries.
+"""
     pdf_qa = RetrievalQA.from_chain_type(
         llm=llm,  # use GooglePalm for language modeling
         chain_type="stuff",
