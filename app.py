@@ -89,17 +89,6 @@ You will interview me, asking all the relevant questions necessary for you to ge
 
 Generate responses by restricting search to data in the given context :{context}
 
- 
-
-Example of a prompt and its response:
-
-Prompt 1: Is interest earned on savings bank account balance taxable in the hands of an individual who is less than 60 years of age?
-
-Response: Interest earned on the balance in a savings bank account is taxable in the hands of an individual who is less than 60 years of age.
-
-However, under Section 80TTA of the Income Tax Act, 1961, a maximum deduction of Rs. 10,000 can be claimed while calculating income against interest earned on the balance in a savings bank account for such an individual.
-
- 
 
 Provide an accurate and concise reply to my queries, by citing names of Acts and Sections relevant to the queries.
 """
