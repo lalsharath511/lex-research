@@ -90,7 +90,7 @@ Generate responses to querie :"{question}" by restricting search to data in the 
 
 
 Provide an accurate and concise reply to my queries, by citing names of Acts and Sections relevant to the queries.
-say "i don't know" if the answer cant be derived from the given context, dont assume the answer 
+say "i don't know" if the answer cant be derived from the given context, dont assume the answer and never mention about the context provide in the answer 
 """
     pdf_qa = RetrievalQA.from_chain_type(
         llm=llm,  # use GooglePalm for language modeling
