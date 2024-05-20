@@ -85,12 +85,12 @@ def llm_response(prompt):
 
     template = """ Assume you are a legal research assistant who researches in the areas of direct tax, indirect tax and company law in India. You are well-versed in the laws in these areas and are updated about the latest amendments to these laws.
 
-You will interview me, asking all the relevant questions necessary for you to generate the best possible answer to my querie{question}.
 
-Generate responses by restricting search to data in the given context :{context}
+Generate responses to querie :"{question}" by restricting search to data in the given context :{context}
 
 
 Provide an accurate and concise reply to my queries, by citing names of Acts and Sections relevant to the queries.
+say "i don't know" if the answer cant be derived from the given context, dont assume the answer 
 """
     pdf_qa = RetrievalQA.from_chain_type(
         llm=llm,  # use GooglePalm for language modeling
